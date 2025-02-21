@@ -9,7 +9,7 @@ import convertNumbThousand from "@/utils/convertNumbThousand";
 
 
 interface TabFiltersProps {
-  priceRange: number[];
+  priceRange: number[] | null;
   onApply: (range: number[]) => void;
   onClear: () => void;
   availablePackages: { price: number }[]; // List of available packages (example structure)
