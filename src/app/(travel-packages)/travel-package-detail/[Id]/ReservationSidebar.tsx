@@ -8,7 +8,7 @@ import GuestsInput from "./GuestsInput"; // Ensure this is correctly imported
 import * as Yup from 'yup';
 
 
-const sendEmail = (userDetails) => {
+const sendEmail = (userDetails:any) => {
   const templateParams = {
     user_name: userDetails.name,
     user_email: userDetails.email,
