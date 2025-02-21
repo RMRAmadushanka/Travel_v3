@@ -17,8 +17,15 @@ interface TabFiltersProps {
 
 const TabFilters = ({ priceRange, onApply, onClear, availablePackages }: TabFiltersProps) => {
 
-  const [rangePrices, setRangePrices] = useState([priceRange[0], priceRange[1]]);
-  const [minMax, setMinMax] = useState([priceRange[0], priceRange[1]]);
+  const [rangePrices, setRangePrices] = useState([
+    priceRange?.[0] ?? 0, 
+    priceRange?.[1] ?? 10000
+  ]);
+  
+  const [minMax, setMinMax] = useState([
+    priceRange?.[0] ?? 0, 
+    priceRange?.[1] ?? 10000
+  ]);
   const [hasChanged, setHasChanged] = useState(false);
 
   const handleClear = () => {
