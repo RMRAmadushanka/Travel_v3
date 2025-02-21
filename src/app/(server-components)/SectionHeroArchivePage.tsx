@@ -4,7 +4,6 @@ import HeroSearchForm, {
   SearchTab,
 } from "../(client-components)/(HeroSearchForm)/HeroSearchForm";
 import Image, { StaticImageData } from "next/image";
-import HeroSearchForm2MobileFactory from "../(client-components)/(HeroSearchForm2Mobile)/HeroSearchForm2MobileFactory";
 
 export interface SectionHeroArchivePageProps {
   className?: string;
