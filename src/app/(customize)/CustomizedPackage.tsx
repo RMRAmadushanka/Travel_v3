@@ -198,7 +198,7 @@ const CustomizedPackage: FC = () => {
                             className="border p-3 rounded-md w-full mt-2  text-black"
                           >
                             <option value="">Select Location</option>
-                            {locations.map((location) => (
+                            {locations.map((location:any) => (
                               <option
                                 key={location?.locationId}
                                 value={location?.locationName}
