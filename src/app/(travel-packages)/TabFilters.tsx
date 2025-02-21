@@ -12,7 +12,7 @@ interface TabFiltersProps {
   priceRange: number[] | null;
   onApply: (range: number[]) => void;
   onClear: () => void;
-  availablePackages: { price: number }[]; // List of available packages (example structure)
+  availablePackages?: { price: number }[]; // List of available packages (example structure)
 }
 
 const TabFilters = ({ priceRange, onApply, onClear, availablePackages }: TabFiltersProps) => {
