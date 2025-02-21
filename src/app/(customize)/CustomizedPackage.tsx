@@ -200,10 +200,10 @@ const CustomizedPackage: FC = () => {
                             <option value="">Select Location</option>
                             {locations.map((location) => (
                               <option
-                                key={location.locationId}
-                                value={location.locationName}
+                                key={location?.locationId}
+                                value={location?.locationName}
                               >
-                                {location.locationName}
+                                {location?.locationName}
                               </option>
                             ))}
                           </Field>
