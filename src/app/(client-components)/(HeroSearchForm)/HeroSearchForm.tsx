@@ -2,9 +2,7 @@
 
 import React, { FC, useState } from "react";
 import StaySearchForm from "./(stay-search-form)/StaySearchForm";
-import ExperiencesSearchForm from "./(experiences-search-form)/ExperiencesSearchForm";
-import RentalCarSearchForm from "./(car-search-form)/RentalCarSearchForm";
-import FlightSearchForm from "./(flight-search-form)/FlightSearchForm";
+
 
 export type SearchTab = "Stays" | "Experiences" | "Cars" | "Flights";
 
