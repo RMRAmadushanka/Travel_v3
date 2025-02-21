@@ -51,7 +51,7 @@ const CustomizedPackage: FC = () => {
       `;
       const result = await client.fetch(query);
       // Flatten the locations from all packages
-      const allLocations = result.flatMap((pkg) => pkg.locations || []);
+      const allLocations = result.flatMap((pkg:any) => pkg.locations || []);
       setLocations(allLocations);
     };
 
