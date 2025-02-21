@@ -108,7 +108,7 @@ const LocationInput: FC<LocationInputProps> = ({
       </div>
     ));
   };
-        console.log(`/listing-stay-map?location=${encodeURIComponent(searchValue)}`);
+  console.log(`/listing-stay-map?location=${encodeURIComponent(searchValue)}`);
   const handleNavigate = () => {
 
 
@@ -121,9 +121,8 @@ const LocationInput: FC<LocationInputProps> = ({
   return (
     <div className={`relative flex ${className}`} ref={containerRef}>
       <div
-        className={`flex-1 z-10 flex items-center focus:outline-none ${
-          showSuggestions ? "nc-hero-field-focused" : ""
-        }`}
+        className={`flex-1 z-10 flex items-center focus:outline-none ${showSuggestions ? "nc-hero-field-focused" : ""
+          }`}
       >
         <div className="relative z-10 flex-1 flex text-left items-center space-x-3 focus:outline-none p-4">
           <div className="text-neutral-300 dark:text-neutral-400">
@@ -136,7 +135,7 @@ const LocationInput: FC<LocationInputProps> = ({
               value={searchValue}
               autoFocus={showSuggestions}
               onChange={(e) => {
-                e.preventDefault(); 
+                e.preventDefault();
                 setSearchValue(e.currentTarget.value);
                 setShowSuggestions(true); // Ensure suggestions are displayed while typing
               }}
@@ -154,10 +153,10 @@ const LocationInput: FC<LocationInputProps> = ({
         </div>
 
         <div className="pr-2 xl:pr-4">
-          <ButtonSubmit onClick={(e) => { 
-    e.preventDefault(); 
-    handleNavigate(); 
-}}  /> {/* Use onClick to trigger navigation */}
+        <ButtonSubmit onClick={(e) => {
+  e.preventDefault();
+  handleNavigate();
+}} />
         </div>
       </div>
 

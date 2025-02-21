@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 
 interface Props {
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const ButtonSubmit: FC<Props> = ({ onClick }) => {
