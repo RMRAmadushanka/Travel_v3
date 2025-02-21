@@ -41,7 +41,7 @@ const SectionGridHasMap: FC = () => {
     const fetchSanityData = async () => {
       const sanityData = await client.fetch(query);
 
-      const mappedData = sanityData.map((item) => ({
+      const mappedData = sanityData.map((item:any) => ({
         id: item.id,
         packageName: item.packageName,
         images: item.images,
@@ -51,7 +51,7 @@ const SectionGridHasMap: FC = () => {
       }));
 
       // Derive initial price range
-      const prices = mappedData.map((item) => item.price);
+      const prices = mappedData.map((item:any) => item.price);
       const minPrice = Math.min(...prices);
       const maxPrice = Math.max(...prices);
 
