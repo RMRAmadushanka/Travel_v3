@@ -18,7 +18,7 @@ const SectionHero3: FC<SectionHero3Props> = ({ className = "" }) => {
         Book exclusive travel packages & reserve your perfect ride for an unforgettable adventure!
         </span>
         <h2 className="font-bold text-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl !leading-[115%] ">
-        Explore Sri Lanka  <br /> Your Dream Journey Awaits!
+        Explore Sri Lanka 2  <br /> Your Dream Journey Awaits!
         </h2>
         <ButtonPrimary
           sizeClass="px-6 py-3 lg:px-8 lg:py-4 rounded-xl"
