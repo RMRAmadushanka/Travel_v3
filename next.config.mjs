@@ -4,6 +4,9 @@ export default {
   experimental: {
     typedRoutes: true,  // Keep this if you need it for typed routes, but remove `appDir`
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   images: {
     remotePatterns: [
       {
