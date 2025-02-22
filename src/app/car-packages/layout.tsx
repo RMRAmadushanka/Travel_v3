@@ -1,10 +1,10 @@
 "use client";
-
 import ListingImageGallery from "@/components/listing-image-gallery/ListingImageGallery";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { ReactNode } from "react";
 import MobileFooterSticky from "../../components/MobileFooterSticky";
 import { imageGallery as listingCarImageGallery } from "./listing-car-detail/constant";
+import { Route } from "next";
 
 const DetailtLayout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
@@ -13,11 +13,12 @@ const DetailtLayout = ({ children }: { children: ReactNode }) => {
   const modal = searchParams?.get("modal");
 
   const handleCloseModalImageGallery = () => {
-    const params = new URLSearchParams(searchParams.toString()); // Use searchParams directly
+    let params = new URLSearchParams(document.location.search);
     params.delete("modal");
-
-    router.push(`${thisPathname}?${params.toString()}`);
+    router.push(`${thisPathname}/?${params.toString()}` as Route);
   };
+
+
 
   return (
     <div className="ListingDetailPage">
@@ -28,6 +29,8 @@ const DetailtLayout = ({ children }: { children: ReactNode }) => {
       />
 
       <div className="container ListingDetailPage__content">{children}</div>
+
+    
 
       {/* STICKY FOOTER MOBILE */}
       <MobileFooterSticky />
