@@ -3,6 +3,7 @@ export default {
   reactStrictMode: false,
   experimental: {
     typedRoutes: true,  // Keep this if you need it for typed routes, but remove `appDir`
+    missingSuspenseWithCSRBailout: false,
   },
   typescript: {
     ignoreBuildErrors: true,
