@@ -1,7 +1,7 @@
 "use client";
 import ListingImageGallery from "@/components/listing-image-gallery/ListingImageGallery";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { ReactNode, Suspense } from "react";
+import React, { ReactNode } from "react";
 import MobileFooterSticky from "../../components/MobileFooterSticky";
 import { imageGallery as listingCarImageGallery } from "./listing-car-detail/constant";
 import { Route } from "next";
@@ -22,13 +22,12 @@ const DetailtLayout = ({ children }: { children: ReactNode }) => {
 
   return (
     <div className="ListingDetailPage">
-      <Suspense>
       <ListingImageGallery
         isShowModal={modal === "PHOTO_TOUR_SCROLLABLE"}
         onClose={handleCloseModalImageGallery}
         images={listingCarImageGallery}
       />
-</Suspense>
+
       <div className="container ListingDetailPage__content">{children}</div>
 
     

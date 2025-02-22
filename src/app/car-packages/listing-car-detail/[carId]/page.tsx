@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, Fragment, useEffect, useState } from "react";
+import React, { FC, Fragment, Suspense, useEffect, useState } from "react";
 import { ArrowRightIcon, Squares2X2Icon } from "@heroicons/react/24/outline";
 import CommentListing from "@/components/CommentListing";
 import FiveStartIconForRate from "@/components/FiveStartIconForRate";
@@ -451,6 +451,7 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
   };
 
   return (
+    <Suspense>
     <div className={` nc-ListingCarDetailPage `}>
       {/* SINGLE HEADER */}
       <header className="rounded-md sm:rounded-xl">
@@ -538,6 +539,7 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
         </div>
       </main>
     </div>
+    </Suspense>
   );
 };
 
