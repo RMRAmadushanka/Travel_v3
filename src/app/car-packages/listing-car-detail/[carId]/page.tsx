@@ -94,7 +94,7 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
 
   const sendEmail = (userDetails) => {
     console.log(startDate);
-    
+
     const templateParams = {
       car_name: carData?.vehicleName,
       user_email: userDetails.email,
@@ -274,13 +274,13 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
     pickupLocation: Yup.string()
       .required("Pickup location is required")
       .min(3, "Minimum 3 characters required"),
-      days: Yup.number()
+    days: Yup.number()
       .required("Total days is required")
       .min(1, "Must be at least 1 day"),
     startDate: Yup.date().required("Start date is required"),
     endDate: Yup.date().required("End date is required"),
     email: Yup.string().email("Invalid email address").required("Email is required"),
-    
+
   });
 
 
@@ -288,71 +288,71 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
 
 
     const handleReserve = async (values, { resetForm }) => {
-          const userDetails = {
-            email: values.email,
-            carName: carData?.vehicleName || "Default Car Name",
-            pickupLocation: values.pickupLocation,
-            totalDays: values.days,    
-            totalPrice: totalPrice,
-            dates: { startDate, endDate },
-            perDayPrice: carData.perDayRent,
-          };
-    
-          console.log(carData.perDayRent);
-          
-    
-    
-          try {
-            // Create promises for both functions
-            const sendEmailPromise = new Promise((resolve, reject) => {
-              try {
-                sendEmail(userDetails);
-                resolve('Email sent successfully');
-              } catch (error) {
-                reject('Error sending email');
-              }
-            });
-    
-            const apiCallPromise = fetch('/api/car-reservation', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(userDetails),
-            }).then((response) => response.json());
-    
-            // Use Promise.all to execute both promises concurrently
-            const [emailResult, apiResult] = await Promise.all([sendEmailPromise, apiCallPromise]);
-    
-            if (apiResult.success) {
-              Swal.fire({
-                icon: 'success',
-                title: 'Reservation Successful',
-                text: `Your car reservation ${carData?.carName} has been successfully completed.`,
-              });
-    
-              // Reset the form after a successful reservation
-              resetForm();
-              setShouldResetDateRange(true)
-              setResetDates(() => () => { });  
-              setStartDate(null); // Reset startDate state
-              setEndDate(null); // Reset endDate state
-            
-            } else {
-              throw new Error('Error saving package or sending email');
-            }
-          } catch (error) {
-            Swal.fire({
-              icon: 'error',
-              title: 'Reservation Failed',
-              text: 'There was an issue with your reservation. Please try again.',
-            });
-          }
-        };
+      const userDetails = {
+        email: values.email,
+        carName: carData?.vehicleName || "Default Car Name",
+        pickupLocation: values.pickupLocation,
+        totalDays: values.days,
+        totalPrice: totalPrice,
+        dates: { startDate, endDate },
+        perDayPrice: carData.perDayRent,
+      };
 
-      
- 
-      
+      console.log(carData.perDayRent);
+
+
+
+      try {
+        // Create promises for both functions
+        const sendEmailPromise = new Promise((resolve, reject) => {
+          try {
+            sendEmail(userDetails);
+            resolve('Email sent successfully');
+          } catch (error) {
+            reject('Error sending email');
+          }
+        });
+
+        const apiCallPromise = fetch('/api/car-reservation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userDetails),
+        }).then((response) => response.json());
+
+        // Use Promise.all to execute both promises concurrently
+        const [emailResult, apiResult] = await Promise.all([sendEmailPromise, apiCallPromise]);
+
+        if (apiResult.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Reservation Successful',
+            text: `Your car reservation ${carData?.carName} has been successfully completed.`,
+          });
+
+          // Reset the form after a successful reservation
+          resetForm();
+          setShouldResetDateRange(true)
+          setResetDates(() => () => { });
+          setStartDate(null); // Reset startDate state
+          setEndDate(null); // Reset endDate state
+
+        } else {
+          throw new Error('Error saving package or sending email');
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Reservation Failed',
+          text: 'There was an issue with your reservation. Please try again.',
+        });
+      }
+    };
+
+
+
+
 
     const calculateTotalPrice = () => {
       return carData.perDayRent * totalDays;
@@ -360,13 +360,13 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
 
     return (
       <Formik
-      initialValues={{
-        startDate: null,
-        endDate: null,
-        days: 0,
-        email:'',
-        pickupLocation:''
-      }}
+        initialValues={{
+          startDate: null,
+          endDate: null,
+          days: 0,
+          email: '',
+          pickupLocation: ''
+        }}
         validationSchema={validationSchema}
         onSubmit={handleReserve}
       >
@@ -399,30 +399,30 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
               <label className="block xl:text-lg font-semibold">Enter your Email</label>
 
               <Field
-                  type="email"
-                  name="email"
-                  placeholder="Enter your Email"
-                  className="w-full px-4 py-2 border border-neutral-200 dark:border-neutral-700 rounded-3xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-neutral-800 dark:text-neutral-200"
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setFieldValue('email', value);  // Update Formik state
-                    setEmail(value);  // Update your custom local state
-                  }}
-                />
-                <ErrorMessage name="pickupLocation" component="div" className="text-red-500 text-sm" />
+                type="email"
+                name="email"
+                placeholder="Enter your Email"
+                className="w-full px-4 py-2 border border-neutral-200 dark:border-neutral-700 rounded-3xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-neutral-800 dark:text-neutral-200"
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setFieldValue('email', value);  // Update Formik state
+                  setEmail(value);  // Update your custom local state
+                }}
+              />
+              <ErrorMessage name="pickupLocation" component="div" className="text-red-500 text-sm" />
 
 
 
               <div className="w-full border-b border-neutral-200 dark:border-neutral-700"></div>
-              <RentalCarDatesRangeInput reset={resetDates}  onDaysChange={async(days, startDate, endDate) => {
-              setFieldValue("startDate", startDate);
-              setFieldValue("endDate", endDate);
-              setFieldValue("days", days);
-              await setTotalDays(days)
-              await setStartDate(startDate)
-              await setEndDate(endDate)
-              await setTotalPrice(days * carData.perDayRent);
-            }}
+              <RentalCarDatesRangeInput reset={resetDates} onDaysChange={async (days, startDate, endDate) => {
+                setFieldValue("startDate", startDate);
+                setFieldValue("endDate", endDate);
+                setFieldValue("days", days);
+                await setTotalDays(days)
+                await setStartDate(startDate)
+                await setEndDate(endDate)
+                await setTotalPrice(days * carData.perDayRent);
+              }}
               />
               <ErrorMessage name="totalDays" component="div" className="text-red-500 text-sm" />
             </div>

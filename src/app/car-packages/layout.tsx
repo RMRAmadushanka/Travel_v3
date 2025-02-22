@@ -4,21 +4,20 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { ReactNode } from "react";
 import MobileFooterSticky from "../../components/MobileFooterSticky";
 import { imageGallery as listingCarImageGallery } from "./listing-car-detail/constant";
-import { Route } from "next";
 
-const DetailtLayout = ({ children }: { children: ReactNode }) => {
+const DetailLayout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const thisPathname = usePathname();
   const searchParams = useSearchParams();
   const modal = searchParams?.get("modal");
 
   const handleCloseModalImageGallery = () => {
-    let params = new URLSearchParams(document.location.search);
+    const params = new URLSearchParams(searchParams.toString());
     params.delete("modal");
-    router.push(`${thisPathname}/?${params.toString()}` as Route);
+
+    const newUrl = params.toString() ? `${thisPathname}?${params.toString()}` : thisPathname;
+    router.push(newUrl);
   };
-
-
 
   return (
     <div className="ListingDetailPage">
@@ -27,15 +26,11 @@ const DetailtLayout = ({ children }: { children: ReactNode }) => {
         onClose={handleCloseModalImageGallery}
         images={listingCarImageGallery}
       />
-
       <div className="container ListingDetailPage__content">{children}</div>
-
-    
-
       {/* STICKY FOOTER MOBILE */}
       <MobileFooterSticky />
     </div>
   );
 };
 
-export default DetailtLayout;
+export default DetailLayout;
