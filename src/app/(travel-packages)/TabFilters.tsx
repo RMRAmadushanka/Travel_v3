@@ -181,7 +181,7 @@ console.log(rangePrices);
 
   return (
     <div className="flex lg:space-x-4">
-      <div className="hidden lg:flex space-x-4">
+      <div className=" lg:flex space-x-4">
         {renderTabsPriceRage()}
       </div>
     </div>

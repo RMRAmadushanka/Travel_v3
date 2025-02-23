@@ -45,7 +45,7 @@ function PageHome2() {
   }, []);
 
   return (
-    <Suspense>
+
     <main className="nc-PageHome2 relative overflow-hidden">
       <div className="container relative space-y-24 mb-24 lg:space-y-28 lg:mb-28">
         <SectionHero2 className="" />
@@ -87,7 +87,7 @@ function PageHome2() {
         </div>
       </div>
     </main>
-    </Suspense>
+
   );
 }
 

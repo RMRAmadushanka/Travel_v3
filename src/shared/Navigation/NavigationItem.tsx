@@ -104,6 +104,7 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({ menuItem }) => {
         // Transform the data to match `megaMenu` format
         const formattedData = data.map((pkg) => ({
           id: pkg._id,
+          pckId: pkg.id,
           title: pkg.packageName,
           image: pkg.images || "/placeholder.jpg",
           price: pkg.price
@@ -155,6 +156,7 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({ menuItem }) => {
                     className={`relative bg-white dark:bg-neutral-900 px-3 py-6 grid gap-1 grid-cols-${visibleItems?.length}`}
                   >
                     {visibleItems?.map((item) => (
+                      <Link key={item.id} href={`/travel-package-detail/${item.pckId}`} passHref>
                       <div key={item.id}>
                         <div className="px-2">
                           <div className="w-36 h-24 rounded-lg overflow-hidden relative flex">
@@ -169,6 +171,7 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({ menuItem }) => {
                         {item.price} LKR
                         </p>
                       </div>
+                      </Link>
                     ))}
                     {/* Add the 'See More' button */}
                     {visibleItems?.length > 3 && (
@@ -202,6 +205,7 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({ menuItem }) => {
         // Transform the data to match `megaMenu` format
         const formattedData = data.map((pkg) => ({
           id: pkg._id,
+          carId: pkg.carId,
           title: pkg.vehicleName,
           image: pkg.cardImage || "/placeholder.jpg",
           price: pkg.perDayRent
@@ -253,6 +257,7 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({ menuItem }) => {
                     className={`relative bg-white dark:bg-neutral-900 px-3 py-6 grid gap-1 grid-cols-${visibleItems?.length}`}
                   >
                     {visibleItems?.map((item) => (
+                      <Link key={item.id} href={`/car-packages/listing-car-detail/${item.carId}`} passHref>
                       <div key={item.id} className="border border-gray-500 rounded-lg border-opacity-15">
                         <div className="px-2">
                           <div className="w-36 h-24 rounded-lg overflow-hidden relative flex">
@@ -267,6 +272,7 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({ menuItem }) => {
                         {item.price} LKR/Day
                         </p>
                       </div>
+                      </Link>
                     ))}
                     {/* Add the 'See More' button */}
                     {visibleItems?.length > 3 && (
