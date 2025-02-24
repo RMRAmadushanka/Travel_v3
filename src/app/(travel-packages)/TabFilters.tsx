@@ -92,17 +92,21 @@ console.log(rangePrices);
                     <div className="space-y-5">
                       <span className="font-medium">Price per day</span>
                       <Slider
-                        range
-                        className="text-red-400"
-                        min={minMax[0]}
-                        max={minMax[1]}
-                        defaultValue={[rangePrices[0], rangePrices[1]]}
-                        allowCross={false}
-                        onChange={(e) => {
-                          setRangePrices(e as number[]);
-                          setHasChanged(true);
-                        }}
-                      />
+  range
+  className="text-red-400 !h-2" // Adjust height
+  min={minMax[0]}
+  max={minMax[1]}
+  defaultValue={[rangePrices[0], rangePrices[1]]}
+  allowCross={false}
+  onChange={(e) => {
+    setRangePrices(e as number[]);
+    setHasChanged(true);
+  }}
+  handleStyle={[
+    { width: 20, height: 20, marginTop: -8 }, // Left handle
+    { width: 20, height: 20, marginTop: -8 }, // Right handle
+  ]}
+/>
                     </div>
 
                     <div className="flex justify-between space-x-5">
