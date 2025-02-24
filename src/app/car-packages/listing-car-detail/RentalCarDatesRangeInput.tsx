@@ -94,6 +94,7 @@ const RentalCarDatesRangeInput: FC<RentalCarDatesRangeInputProps> = ({
                   monthsShown={2}
                   showPopperArrow={false}
                   inline
+                  minDate={new Date()}
                   renderCustomHeader={(p) => <DatePickerCustomHeaderTwoMonth {...p} />}
                   renderDayContents={(day, date) => <DatePickerCustomDay dayOfMonth={day} date={date} />}
                 />

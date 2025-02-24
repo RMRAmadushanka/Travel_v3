@@ -22,6 +22,9 @@ const StayDatesRangeInput: FC<StayDatesRangeInputProps> = ({
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
+  const today = new Date(); // Get today's date
+  today.setHours(0, 0, 0, 0); // Set time to midnight to avoid time-related issues
+
   useEffect(() => {
     if (reset) {
       setStartDate(null);
@@ -77,7 +80,7 @@ const StayDatesRangeInput: FC<StayDatesRangeInputProps> = ({
     }
   };
 
-  const minDate = startDate;
+  const minDate = today; // Set minDate to today
   const maxDate = startDate
     ? new Date(startDate.getTime() + (days - 1) * 24 * 60 * 60 * 1000)
     : null;
@@ -146,7 +149,7 @@ const StayDatesRangeInput: FC<StayDatesRangeInputProps> = ({
                   monthsShown={2}
                   showPopperArrow={false}
                   inline
-                  minDate={minDate}
+                  minDate={minDate} // Use today as the minimum date
                   maxDate={maxDate}
                   renderCustomHeader={(p) => (
                     <DatePickerCustomHeaderTwoMonth {...p} />
