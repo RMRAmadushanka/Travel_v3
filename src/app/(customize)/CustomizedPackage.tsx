@@ -162,26 +162,26 @@ const CustomizedPackage: FC = () => {
                   />
                 </div>
 
-      {/* Arrival Date - Using DatePicker with Calendar Icon */}
-      <div className="space-y-2">
-  <Label>Arrival Date</Label>
-  <div className="relative">
-    <DatePicker
-      selected={values.arrivalDate ? new Date(values.arrivalDate) : null}
-      onChange={(date) => setFieldValue("arrivalDate", date)}
-      className="border p-3 rounded-md w-full text-black pl-12 pr-10" // Add padding left and right for space
-      dateFormat="yyyy-MM-dd"
-      placeholderText="Select arrival date"
-      minDate={new Date()}
-    />
-    <FaCalendar className="absolute top-4 left-3 text-gray-500" /> {/* Positioned inside the input field */}
-  </div>
-  <ErrorMessage
-    name="arrivalDate"
-    component="div"
-    className="text-red-500 text-sm mt-1"
-  />
-</div>
+                {/* Arrival Date - Using DatePicker with Calendar Icon */}
+                <div className="space-y-2">
+                  <Label>Arrival Date</Label>
+                  <div className="relative">
+                    <DatePicker
+                      selected={values.arrivalDate ? new Date(values.arrivalDate) : null}
+                      onChange={(date) => setFieldValue("arrivalDate", date)}
+                      className="border p-3 rounded-md w-full text-black pl-12 pr-10" // Add padding left and right for space
+                      dateFormat="yyyy-MM-dd"
+                      placeholderText="Select arrival date"
+                      minDate={new Date()}
+                    />
+                    <FaCalendar className="absolute top-4 left-3 text-gray-500" /> {/* Positioned inside the input field */}
+                  </div>
+                  <ErrorMessage
+                    name="arrivalDate"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
 
 
                 {/* Pickup Place */}

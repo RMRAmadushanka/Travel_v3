@@ -94,39 +94,30 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({ menuItem }) => {
     });
   };
 
-  // ===================== MENU MEGAMENU =====================
   const renderMegaMenu = (menu: NavItemType) => {
-
     const [travelPackages, setTravelPackages] = useState([]);
-
+    const [loading, setLoading] = useState(true);
+  
     useEffect(() => {
       client.fetch(query).then((data) => {
-        // Transform the data to match `megaMenu` format
         const formattedData = data.map((pkg) => ({
           id: pkg._id,
           pckId: pkg.id,
           title: pkg.packageName,
           image: pkg.images || "/placeholder.jpg",
-          price: pkg.price
+          price: pkg.price,
         }));
         setTravelPackages(formattedData);
+        setLoading(false);
       });
     }, []);
-
-
-    
-
-    const isHover = menuCurrentHovers.includes(menu.id);
-    
-    const isFull = menu.megaMenu && menu.megaMenu?.length > 3;
-    const classPopover = isFull
-      ? "menu-megamenu--large"
-      : "menu-megamenu--small relative";
-    const classPanel = isFull ? "left-0" : "-translate-x-1/2 left-1/2";
   
-    // Slice the megaMenu to show only the first 5 items
+    const isHover = menuCurrentHovers.includes(menu.id);
+    const isFull = menu.megaMenu && menu.megaMenu?.length > 3;
+    const classPopover = isFull ? "menu-megamenu--large" : "menu-megamenu--small relative";
+    const classPanel = isFull ? "left-0" : "-translate-x-1/2 left-1/2";
     const visibleItems = travelPackages?.slice(0, 4);
-    
+  
     return (
       <Popover
         as="li"
@@ -152,29 +143,38 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({ menuItem }) => {
                 className={`will-change-transform sub-menu absolute top-full transform z-10 w-screen max-w-sm px-4 sm:px-0 lg:max-w-max ${classPanel}`}
               >
                 <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black dark:ring-white ring-opacity-5 dark:ring-opacity-10 text-sm">
-                  <div
-                    className={`relative bg-white dark:bg-neutral-900 px-3 py-6 grid gap-1 grid-cols-${visibleItems?.length}`}
-                  >
-                    {visibleItems?.map((item) => (
-                      <Link key={item.id} href={`/travel-package-detail/${item.pckId}`} passHref>
-                      <div key={item.id}>
-                        <div className="px-2">
-                          <div className="w-36 h-24 rounded-lg overflow-hidden relative flex">
-                            <Image alt="" src={item.image[0].asset.url} fill sizes="200px" />
+                <div
+  className="relative bg-white dark:bg-neutral-900 px-3 py-9 grid gap-1 grid-cols-4"
+>
+                    {loading
+                      ? Array.from({ length: 4 }).map((_, index) => (
+                          <div key={index} className="animate-pulse">
+                            <div className="px-2">
+                              <div className="w-36 h-24 rounded-lg bg-gray-300 dark:bg-gray-700" />
+                            </div>
+                            <div className="w-32 h-4 bg-gray-300 dark:bg-gray-700 my-2 mx-2 rounded" />
+                            <div className="w-20 h-4 bg-gray-300 dark:bg-gray-700 my-2 mx-2 rounded" />
                           </div>
-                        </div>
-                        <p className="font-medium text-neutral-900 dark:text-neutral-200 py-1 px-2 my-2">
-                          {item.title}
-                          
-                        </p>
-                        <p className="font-medium text-neutral-900 dark:text-neutral-200 py-1 px-2 my-2">
-                        {item.price} LKR
-                        </p>
-                      </div>
-                      </Link>
-                    ))}
-                    {/* Add the 'See More' button */}
-                    {visibleItems?.length > 3 && (
+                        ))
+                      : visibleItems?.map((item) => (
+                          <Link key={item.id} href={`/travel-package-detail/${item.pckId}`} passHref>
+                            <div key={item.id}>
+                              <div className="px-2">
+                                <div className="w-36 h-24 rounded-lg overflow-hidden relative flex">
+                                  <Image alt="" src={item.image[0].asset.url} fill sizes="200px" />
+                                </div>
+                              </div>
+                              <p className="font-medium text-neutral-900 dark:text-neutral-200 py-1 px-2 my-2">
+                                {item.title}
+                              </p>
+                              <p className="font-medium text-neutral-900 dark:text-neutral-200 py-1 px-2 my-2">
+                                {item.price} LKR
+                              </p>
+                            </div>
+                          </Link>
+                        ))}
+  
+                    {visibleItems?.length > 3 && !loading && (
                       <div className="col-span-full mt-4">
                         <Link
                           href="/travel-packages"
@@ -194,15 +194,14 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({ menuItem }) => {
     );
   };
   
+  
 
-  // ===================== MENU MEGAMENU =====================
   const renderMegaMenu2 = (menu: NavItemType) => {
-
     const [carPackages, setCarPackages] = useState([]);
-
+    const [loading, setLoading] = useState(true);
+  
     useEffect(() => {
       client.fetch(query2).then((data) => {
-        // Transform the data to match `megaMenu` format
         const formattedData = data.map((pkg) => ({
           id: pkg._id,
           carId: pkg.carId,
@@ -211,23 +210,16 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({ menuItem }) => {
           price: pkg.perDayRent
         }));
         setCarPackages(formattedData);
+        setLoading(false);
       });
     }, []);
-
-    console.log(carPackages);
-    
-
-    const isHover = menuCurrentHovers.includes(menu.id);
-    
-    const isFull = menu.megaMenu && menu.megaMenu?.length > 3;
-    const classPopover = isFull
-      ? "menu-megamenu--large"
-      : "menu-megamenu--small relative";
-    const classPanel = isFull ? "left-0" : "-translate-x-1/2 left-1/2";
   
-    // Slice the megaMenu to show only the first 5 items
-    const visibleItems = carPackages?.slice(0, 4);
-    
+    const isHover = menuCurrentHovers.includes(menu.id);
+    const isFull = menu.megaMenu && menu.megaMenu?.length > 3;
+    const classPopover = isFull ? "menu-megamenu--large" : "menu-megamenu--small relative";
+    const classPanel = isFull ? "left-0" : "-translate-x-1/2 left-1/2";
+    const visibleItems = loading ? new Array(4).fill(null) : carPackages?.slice(0, 4);
+  
     return (
       <Popover
         as="li"
@@ -252,35 +244,32 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({ menuItem }) => {
                 static
                 className={`will-change-transform sub-menu absolute top-full transform z-10 w-screen max-w-sm px-4 sm:px-0 lg:max-w-max ${classPanel}`}
               >
-                <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black dark:ring-white ring-opacity-5 dark:ring-opacity-10 text-sm ">
-                  <div
-                    className={`relative bg-white dark:bg-neutral-900 px-3 py-6 grid gap-1 grid-cols-${visibleItems?.length}`}
-                  >
-                    {visibleItems?.map((item) => (
-                      <Link key={item.id} href={`/car-packages/listing-car-detail/${item.carId}`} passHref>
-                      <div key={item.id} className="border border-gray-500 rounded-lg border-opacity-15">
-                        <div className="px-2">
-                          <div className="w-36 h-24 rounded-lg overflow-hidden relative flex">
-                            <Image alt="" src={item.image} fill sizes="200px" />
+                <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black dark:ring-white ring-opacity-5 dark:ring-opacity-10 text-sm">
+                  <div className={`relative bg-white dark:bg-neutral-900 px-3 py-6 grid gap-1 grid-cols-${visibleItems?.length}`}> 
+                    {visibleItems?.map((item, index) => (
+                      item ? (
+                        <Link key={item.id} href={`/car-packages/listing-car-detail/${item.carId}`} passHref>
+                          <div className="border border-gray-500 rounded-lg border-opacity-15">
+                            <div className="px-2">
+                              <div className="w-36 h-24 rounded-lg overflow-hidden relative flex">
+                                <Image alt="" src={item.image} fill sizes="200px" />
+                              </div>
+                            </div>
+                            <p className="font-medium text-neutral-900 dark:text-neutral-200 py-1 px-2 my-2">{item.title}</p>
+                            <p className="font-medium text-neutral-900 dark:text-neutral-200 py-1 px-2 my-2">{item.price} LKR/Day</p>
                           </div>
+                        </Link>
+                      ) : (
+                        <div key={index} className="border border-gray-300 rounded-lg p-3 animate-pulse">
+                          <div className="w-36 h-24 bg-gray-300 rounded-md"></div>
+                          <div className="h-4 bg-gray-300 rounded-md w-3/4 mt-2"></div>
+                          <div className="h-4 bg-gray-300 rounded-md w-1/2 mt-2"></div>
                         </div>
-                        <p className="font-medium text-neutral-900 dark:text-neutral-200 py-1 px-2 my-2">
-                          {item.title}
-                          
-                        </p>
-                        <p className="font-medium text-neutral-900 dark:text-neutral-200 py-1 px-2 my-2">
-                        {item.price} LKR/Day
-                        </p>
-                      </div>
-                      </Link>
+                      )
                     ))}
-                    {/* Add the 'See More' button */}
-                    {visibleItems?.length > 3 && (
+                    {visibleItems?.length > 3 && !loading && (
                       <div className="col-span-full mt-4">
-                        <Link
-                          href="/car-packages"
-                          className="inline-flex items-center text-blue-600 font-medium hover:underline"
-                        >
+                        <Link href="/car-packages" className="inline-flex items-center text-blue-600 font-medium hover:underline">
                           See More
                         </Link>
                       </div>

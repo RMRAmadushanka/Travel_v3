@@ -17,11 +17,13 @@ import GuestsInput from "./GuestsInput";
 import { client } from "@/utils/client";
 import SaleOffBadge from "@/components/SaleOffBadge";
 import emailjs from '@emailjs/browser';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { Formik, Field, Form, ErrorMessage, useFormik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios'
 import Swal from "sweetalert2";
 import PhoneInput from "react-phone-input-2";
 import MobileFooterSticky from "@/components/MobileFooterSticky";
+import Textarea from "@/shared/Textarea";
 export interface ListingStayDetailPageProps { }
 
 const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
@@ -47,13 +49,15 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
   const [resetGuests, setResetGuests] = useState<() => void>(() => () => { });
   const [shouldResetDateRange, setShouldResetDateRange] = useState(false);
 
-
-
+  const [feedbacks, setFeedbacks] = useState(packageData?.feedback || []);
+  const [visibleFeedbacks, setVisibleFeedbacks] = useState(5);
+  const [selectedRating, setSelectedRating] = useState(5);
   useEffect(() => {
     const fetchPackage = async () => {
       try {
         const data = await client.fetch(
           `*[_type == "travelPackage" && id == $id][0]{
+            id,
             packageName,
             description,
             duration,
@@ -87,9 +91,14 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
     };
 
     fetchPackage();
+
   }, []);
 
-
+  useEffect(() => {
+    if (packageData?.id) {
+      fetchUpdatedFeedbacks();
+    }
+  }, [packageData?.id]); 
   const sendEmail = (userDetails) => {
     const templateParams = {
       user_name: userDetails.name,
@@ -209,46 +218,136 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
     );
   };
 
+  const feedbackValidationSchema = Yup.object({
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    comment: Yup.string().min(10, "Comment must be at least 10 characters").required("Comment is required"),
+  });
+
+// Runs when packageData.id changes
+
+const fetchUpdatedFeedbacks = async () => {
+  try {
+    const response = await axios.get(`/api/feedback/${packageData.id}`);
+    setFeedbacks(response.data);  // Update feedback list
+
+  } catch (error) {
+    console.error("Error fetching feedbacks:", error);
+    setFeedbacks([]);
+
+  }
+};
+
+// Handle adding new feedback
+const handleFeedback = async (values, { resetForm }) => {
+  try {
+    const res = await fetch("/api/feedback", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        packageId: packageData?.id,
+        email: values.email,
+        comment: values.comment,
+        userName: values.email.split("@")[0],
+        rating: selectedRating,
+      }),
+    });
+
+    if (!res.ok) throw new Error("Failed to submit feedback");
+
+    // Get the newly added feedback from the response and update the state
+    const newFeedback = await res.json();
+
+    // Append new feedback to the current list
+    setFeedbacks((prevFeedbacks) => [newFeedback, ...prevFeedbacks]);
+    setSelectedRating(5)
+
+    resetForm();  // Reset the form after submission
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const handleViewMore = () => {
+  setVisibleFeedbacks((prev) =>
+    prev === visibleFeedbacks ? feedbacks.length : 5
+  );
+};
+
+
   //Feedback section
   const renderSection6 = () => {
+
+    const totalFeedbacks = feedbacks?.length || 0;
+
+    const handleViewMore = () => {
+      setVisibleFeedbacks(visibleFeedbacks === 5 ? totalFeedbacks : 5);
+    };
+
+
+    const handleRatingChange = (newRating: number) => {
+      setSelectedRating(newRating);
+      console.log("User selected rating:", newRating);
+      // You can use this value for API calls, state updates, etc.
+    };
+  
     return (
       <div className="listingSection__wrap">
         {/* HEADING */}
-        <h2 className="text-2xl font-semibold">Reviews (23 reviews)</h2>
-        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
-
+        <h2 className="text-2xl font-semibold">Reviews ({totalFeedbacks} reviews)</h2>
+        <div className="w-50 border-b border-neutral-200 dark:border-neutral-700"></div>
+  
         {/* Content */}
-        <div className="space-y-5">
-          <FiveStartIconForRate iconClass="w-6 h-6" className="space-x-0.5" />
-          <div className="relative">
-            <Input
-              fontClass=""
-              sizeClass="h-16 px-4 py-3"
-              rounded="rounded-3xl"
-              placeholder="Share your thoughts ..."
-            />
-            <ButtonCircle
-              className="absolute right-2 top-1/2 transform -translate-y-1/2"
-              size=" w-12 h-12 "
-            >
-              <ArrowRightIcon className="w-5 h-5" />
-            </ButtonCircle>
-          </div>
-        </div>
-
-        {/* comment */}
+        <Formik
+          initialValues={{ email: "", comment: "" }}
+          validationSchema={feedbackValidationSchema}
+          onSubmit={handleFeedback}
+        >
+          {({ isSubmitting }) => (
+            <Form className="space-y-5 gap-5">
+              <FiveStartIconForRate iconClass="w-6 h-6" className="space-x-0.5"  defaultPoint={selectedRating} onChange={handleRatingChange} />
+              
+              <div className="relative">
+                <Field
+                  name="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  className="h-10 px-4 py-3 rounded-3xl w-full"
+                />
+                <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+  
+                <Field
+                  as="textarea"
+                  name="comment"
+                  placeholder="Share your thoughts ..."
+                  className="w-full px-4 py-3 rounded-3xl mt-4"
+                />
+                <ErrorMessage name="comment" component="div" className="text-red-500 text-sm" />
+  
+                <ButtonPrimary type="submit" className="w-full mt-4" disabled={isSubmitting}>
+                  Submit
+                </ButtonPrimary>
+              </div>
+            </Form>
+          )}
+        </Formik>
+  
+        {/* Comments */}
         <div className="divide-y divide-neutral-100 dark:divide-neutral-800">
-          {packageData?.feedback.map((item, key) => {
-            return <CommentListing key={key} className="py-8" data={item} />;
-          })}
-          <div className="pt-8">
-            <ButtonSecondary>View more 20 reviews</ButtonSecondary>
-          </div>
+          {feedbacks?.slice(0, visibleFeedbacks).map((item, key) => (
+            <CommentListing key={key} className="py-8" data={item}  fetchUpdatedFeedbacks={fetchUpdatedFeedbacks} />
+          ))}
+  
+          {totalFeedbacks > 5 && (
+            <div className="pt-8">
+              <ButtonSecondary onClick={handleViewMore}>
+                {visibleFeedbacks === 5 ? `View more ${totalFeedbacks - 5} reviews` : "Show Less"}
+              </ButtonSecondary>
+            </div>
+          )}
         </div>
       </div>
     );
   };
-
 
 
   const renderSection8 = () => {
@@ -528,7 +627,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
                   Enter Your phone number
                 </label>
                 <PhoneInput
-                  
+
                   value={phoneNumber}
                   onChange={(value) => {
                     setFieldValue('phoneNumber', value);

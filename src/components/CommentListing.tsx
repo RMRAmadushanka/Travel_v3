@@ -1,14 +1,20 @@
-import { StarIcon } from "@heroicons/react/24/solid";
-import React, { FC } from "react";
+import { StarIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import React, { FC, useState } from "react";
 import Avatar from "@/shared/Avatar";
-
+import * as Yup from "yup";
+import Modal from "./Modal";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 interface CommentListingDataType {
   userName: string;
-  userId?:string,
+  userId?: string;
   avatar?: string;
   comment: string;
   rating: number;
-  carId?:string
+  carId?: string;
+  email?: string;
+  _id: string; // Sanity Document ID
 }
 
 export interface CommentListingProps {
@@ -17,61 +23,232 @@ export interface CommentListingProps {
   hasListingTitle?: boolean;
 }
 
+const CommentListing: FC<CommentListingProps> = ({ className = "", data, hasListingTitle, fetchUpdatedFeedbacks }) => {
+  console.log(data);
 
-const CommentListing: FC<CommentListingProps> = ({
-  className = "",
-  data,
-  hasListingTitle,
-}) => {
-  const renderStars = (rating: number) => {
-    // Create an array of 5 stars and fill them accordingly
-    return Array.from({ length: 5 }, (_, index) => {
-      return index < rating ? (
-        <StarIcon key={index} className="w-4 h-4 text-yellow-500" />
-      ) : (
-        ""
-        
-      );
-    });
+  const [isEmailPopupOpen, setIsEmailPopupOpen] = useState(false);
+  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
+  const [isDeleteConfirmPopupOpen, setIsDeleteConfirmPopupOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [emailError, setEmailError] = useState(""); // Track email error message
+  const [newComment, setNewComment] = useState(data?.comment || "");
+  const [actionType, setActionType] = useState<"edit" | "delete" | null>(null);
+
+  // Handle Email Verification
+  const handleVerifyEmail = async () => {
+    setEmailError(""); // Reset the error message before checking
+
+    try {
+      const response = await fetch("/api/feedback/verify-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (data.valid) {
+        setIsEmailValid(true);
+        setIsEmailPopupOpen(false);
+
+        if (actionType === "edit") {
+          setIsEditPopupOpen(true);
+        } else if (actionType === "delete") {
+          setIsDeleteConfirmPopupOpen(true);
+        }
+      } else {
+        setEmailError("Invalid email. Please enter the correct email."); // Set error message
+      }
+    } catch (error) {
+      console.error("Error validating email:", error);
+      setEmailError("Error validating email. Please try again.");
+    }
   };
+
+  // Handle Update Comment (only after email verification)
+  const handleUpdateComment = async () => {
+    if (!isEmailValid) {
+      toast.error("Please verify your email before updating the comment.");
+      return;
+    }
+  
+
+
+    try {
+      const response = await fetch("/api/feedback/update-comment", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, newComment }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success("Comment updated successfully!");
+        setIsEditPopupOpen(false); // Close the edit popup
+        fetchUpdatedFeedbacks();
+      } else {
+        toast.error("Failed to update comment.");
+      }
+    } catch (error) {
+      toast.error("Something went wrong.");
+    }
+  };
+
+  // Handle Delete Comment
+  const handleDeleteComment = async () => {
+    if (!data?._id) {
+      toast.error("Invalid feedback ID.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/feedback/${data._id}`, {
+        method: "DELETE",
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        toast.success("Comment deleted successfully!");
+        setIsDeleteConfirmPopupOpen(false);
+        fetchUpdatedFeedbacks();
+      } else {
+        toast.error("Failed to delete comment.");
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      toast.error("Something went wrong.");
+    }
+  };
+
+  const emailValidationSchema = Yup.object({
+    email: Yup.string()
+      .email("Invalid email format")
+      .required("Email is required"),
+  });
+
+
   return (
-    <div
-      className={`nc-CommentListing flex space-x-4 ${className}`}
-      data-nc-id="CommentListing"
-    >
+    <div className={`nc-CommentListing flex space-x-4 group relative ${className}`} data-nc-id="CommentListing">
       <div className="pt-0.5">
-        <Avatar
-          sizeClass="h-10 w-10 text-lg"
-          radius="rounded-full"
-          userName={data?.userName}
-          imgUrl={""}
-        />
+        <Avatar sizeClass="h-10 w-10 text-lg" radius="rounded-full" userName={data?.userName} imgUrl={""} />
       </div>
-      <div className="flex-grow">
+      <div className="flex-grow relative">
         <div className="flex justify-between space-x-3">
           <div className="flex flex-col">
             <div className="text-sm font-semibold">
               <span>{data?.userName}</span>
               {hasListingTitle && (
                 <>
-                  <span className="text-neutral-500 dark:text-neutral-400 font-normal">
-                    {` review in `}
-                  </span>
-                  <a href="/">The Lounge & Bar</a>
+                  <span className="text-neutral-500 dark:text-neutral-400 font-normal">{` review in `}</span>
+                  <a href="/">The Lounge & Bar2</a>
                 </>
               )}
             </div>
           </div>
-          <div className="flex text-yellow-500">
-  
-          {renderStars(data?.rating || 0)}
-            
-          </div>
+          <div className="flex text-yellow-500">{Array.from({ length: 5 }, (_, i) => i < data?.rating ? <StarIcon key={i} className="w-4 h-4 text-yellow-500" /> : "")}</div>
         </div>
-        <span className="block mt-3 text-neutral-6000 dark:text-neutral-300">
-          {data?.comment}
-        </span>
+        <span className="block mt-3 text-neutral-6000 dark:text-neutral-300">{data?.comment}</span>
+
+        <div className="absolute bottom-0 right-0 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <button onClick={() => {
+            setNewComment(data?.comment || "");  // Set the current comment for editing
+            setIsEmailPopupOpen(true); // Open the email verification popup
+            setActionType("edit");  // Set the action to 'edit'
+          }} className="p-1 text-gray-500 hover:text-blue-500">
+            <PencilIcon className="w-4 h-4" />
+          </button>
+
+          <button onClick={() => {
+            setEmail("");  // Clear email when opening delete popup
+            setIsEmailPopupOpen(true);  // Open the email verification popup
+            setActionType("delete");  // Set the action to 'delete'
+          }} className="p-1 text-gray-500 hover:text-red-500">
+            <TrashIcon className="w-4 h-4" />
+          </button>
+        </div>
       </div>
+
+
+
+      {isEmailPopupOpen && (
+        <Modal title="Verify Email" onClose={() => setIsEmailPopupOpen(false)}>
+          <Formik
+            initialValues={{ email: "" }}
+            validationSchema={emailValidationSchema}
+            onSubmit={async (values, { setSubmitting, setFieldError }) => {
+              try {
+                const response = await fetch("/api/feedback/verify-email", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ email: values.email }),
+                });
+
+                const data = await response.json();
+
+                if (data.valid) {
+                  setIsEmailValid(true);
+                  setIsEmailPopupOpen(false);
+                  setEmail(values.email); 
+                  
+
+                  if (actionType === "edit") {
+                    setIsEditPopupOpen(true);
+                  } else if (actionType === "delete") {
+                    setIsDeleteConfirmPopupOpen(true);
+                  }
+                } else {
+                  setFieldError("email", "Invalid email. Please enter the correct email.");
+                }
+              } catch (error) {
+                console.error("Error validating email:", error);
+                setFieldError("email", "Error validating email. Please try again.");
+              }
+
+              setSubmitting(false);
+            }}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <Field
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  className="border p-2 w-full"
+                />
+                <ErrorMessage name="email" component="p" className="text-red-500 text-sm mt-2" />
+
+                <button
+                  type="submit"
+                  className="mt-3 bg-blue-500 text-white px-4 py-2 rounded"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Verifying..." : "Submit"}
+                </button>
+              </Form>
+            )}
+          </Formik>
+        </Modal>
+      )}
+
+
+      {/* Edit Comment Popup */}
+      {isEditPopupOpen && (
+        <Modal title="Edit Comment" onClose={() => setIsEditPopupOpen(false)}>
+          <textarea className="border p-2 w-full" value={newComment} onChange={(e) => setNewComment(e.target.value)} />
+          <button onClick={handleUpdateComment} className="mt-3 bg-green-500 text-white px-4 py-2 rounded">Update</button>
+        </Modal>
+      )}
+
+      {/* Delete Confirmation Popup */}
+      {isDeleteConfirmPopupOpen && (
+        <Modal title="Confirm Deletion" onClose={() => setIsDeleteConfirmPopupOpen(false)}>
+          <p>Are you sure you want to delete this comment?</p>
+          <button onClick={handleDeleteComment} className="mt-3 bg-red-500 text-white px-4 py-2 rounded">Delete</button>
+        </Modal>
+      )}
     </div>
   );
 };

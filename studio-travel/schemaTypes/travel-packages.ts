@@ -72,7 +72,8 @@ export default {
               { name: "userName", title: "User Name", type: "string" },
               { name: "comment", title: "Comment", type: "text" },
               { name: "packageId", title: "Package ID", type: "string" },
-              { name: "userId", title: "User ID", type: "string" }
+              { name: "userId", title: "User ID", type: "string" },
+              { name: "email", title: "User Email", type: "string", validation: Rule => Rule.email() }
             ]
           }
         ]
