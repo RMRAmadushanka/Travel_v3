@@ -6,6 +6,7 @@ import Modal from "./Modal";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FaExclamationTriangle } from 'react-icons/fa';
 interface CommentListingDataType {
   userName: string;
   userId?: string;
@@ -24,7 +25,7 @@ export interface CommentListingProps {
 }
 
 const CommentListing: FC<CommentListingProps> = ({ className = "", data, hasListingTitle, fetchUpdatedFeedbacks }) => {
-  console.log(data);
+ 
 
   const [isEmailPopupOpen, setIsEmailPopupOpen] = useState(false);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
@@ -34,7 +35,12 @@ const CommentListing: FC<CommentListingProps> = ({ className = "", data, hasList
   const [emailError, setEmailError] = useState(""); // Track email error message
   const [newComment, setNewComment] = useState(data?.comment || "");
   const [actionType, setActionType] = useState<"edit" | "delete" | null>(null);
-
+  const packageId = data?.packageId;
+  const pckEmail = data?.email;
+  const userId = data?.userId;
+  const commentId = data?._id;
+  console.log(data);
+  
   // Handle Email Verification
   const handleVerifyEmail = async () => {
     setEmailError(""); // Reset the error message before checking
@@ -79,7 +85,7 @@ const CommentListing: FC<CommentListingProps> = ({ className = "", data, hasList
       const response = await fetch("/api/feedback/update-comment", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, newComment }),
+        body: JSON.stringify({ feedbackId: commentId, newComment }),
       });
 
       const data = await response.json();
@@ -175,79 +181,94 @@ const CommentListing: FC<CommentListingProps> = ({ className = "", data, hasList
 
       {isEmailPopupOpen && (
         <Modal title="Verify Email" onClose={() => setIsEmailPopupOpen(false)}>
-          <Formik
-            initialValues={{ email: "" }}
-            validationSchema={emailValidationSchema}
-            onSubmit={async (values, { setSubmitting, setFieldError }) => {
-              try {
-                const response = await fetch("/api/feedback/verify-email", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ email: values.email }),
-                });
-
-                const data = await response.json();
-
-                if (data.valid) {
-                  setIsEmailValid(true);
-                  setIsEmailPopupOpen(false);
-                  setEmail(values.email); 
-                  
-
-                  if (actionType === "edit") {
-                    setIsEditPopupOpen(true);
-                  } else if (actionType === "delete") {
-                    setIsDeleteConfirmPopupOpen(true);
-                  }
-                } else {
-                  setFieldError("email", "Invalid email. Please enter the correct email.");
+        <div className="mb-4 p-4 bg-yellow-200 text-yellow-800 flex items-center rounded">
+          <FaExclamationTriangle className="mr-2 text-xl" />
+          <p>
+            {actionType === "delete"
+              ? "Please verify your email to be able to delete your feedback."
+              : "Please verify your email to be able to update your feedback."}
+          </p>
+        </div>
+    
+        <Formik
+          initialValues={{ email: "" }}
+          validationSchema={emailValidationSchema}
+          onSubmit={async (values, { setSubmitting, setFieldError }) => {
+            try {
+              const response = await fetch("/api/feedback/verify-email", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: values.email, packageId, userId }),
+              });
+    
+              const data = await response.json();
+    
+              if (data.valid) {
+                setIsEmailValid(true);
+                setIsEmailPopupOpen(false);
+                setEmail(values.email);
+    
+                if (actionType === "edit") {
+                  setIsEditPopupOpen(true);
+                } else if (actionType === "delete") {
+                  setIsDeleteConfirmPopupOpen(true);
                 }
-              } catch (error) {
-                console.error("Error validating email:", error);
-                setFieldError("email", "Error validating email. Please try again.");
+              } else {
+                setFieldError("email", "Invalid email. Please enter the correct email.");
               }
-
-              setSubmitting(false);
-            }}
-          >
-            {({ isSubmitting }) => (
-              <Form>
-                <Field
-                  type="email"
-                  name="email"
-                  placeholder="Enter your email"
-                  className="border p-2 w-full"
-                />
-                <ErrorMessage name="email" component="p" className="text-red-500 text-sm mt-2" />
-
-                <button
-                  type="submit"
-                  className="mt-3 bg-blue-500 text-white px-4 py-2 rounded"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Verifying..." : "Submit"}
-                </button>
-              </Form>
-            )}
-          </Formik>
-        </Modal>
-      )}
-
-
-      {/* Edit Comment Popup */}
-      {isEditPopupOpen && (
-        <Modal title="Edit Comment" onClose={() => setIsEditPopupOpen(false)}>
-          <textarea className="border p-2 w-full" value={newComment} onChange={(e) => setNewComment(e.target.value)} />
-          <button onClick={handleUpdateComment} className="mt-3 bg-green-500 text-white px-4 py-2 rounded">Update</button>
-        </Modal>
-      )}
-
-      {/* Delete Confirmation Popup */}
-      {isDeleteConfirmPopupOpen && (
-        <Modal title="Confirm Deletion" onClose={() => setIsDeleteConfirmPopupOpen(false)}>
-          <p>Are you sure you want to delete this comment?</p>
-          <button onClick={handleDeleteComment} className="mt-3 bg-red-500 text-white px-4 py-2 rounded">Delete</button>
-        </Modal>
+            } catch (error) {
+              console.error("Error validating email:", error);
+              setFieldError("email", "Error validating email. Please try again.");
+            }
+    
+            setSubmitting(false);
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <Field
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                className="border p-2 w-full"
+              />
+              <ErrorMessage name="email" component="p" className="text-red-500 text-sm mt-2" />
+    
+              <button
+  type="submit"
+  className="mt-3 bg-green-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-200 w-full"
+  disabled={isSubmitting}
+>
+                {isSubmitting ? "Verifying..." : "Submit"}
+              </button>
+            </Form>
+          )}
+        </Formik>
+      </Modal>
+    )}
+    
+    {/* Edit Comment Popup */}
+    {isEditPopupOpen && (
+      <Modal title="Edit Comment" onClose={() => setIsEditPopupOpen(false)}>
+        <textarea
+          className="border p-2 w-full"
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+        />
+        <button onClick={handleUpdateComment} className="mt-3 bg-green-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-200 w-full">
+          Update
+        </button>
+      </Modal>
+    )}
+    
+    {/* Delete Confirmation Popup */}
+    {isDeleteConfirmPopupOpen && (
+      <Modal title="Confirm Deletion" onClose={() => setIsDeleteConfirmPopupOpen(false)}>
+        <p>Are you sure you want to delete this comment?</p>
+        <button onClick={handleDeleteComment} className="mt-3 bg-red-500 text-white px-6 py-2 rounded-full shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-700 focus:ring-opacity-50 transition duration-200 w-full">
+          Delete
+        </button>
+      </Modal>
       )}
     </div>
   );

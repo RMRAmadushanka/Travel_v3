@@ -24,6 +24,7 @@ import Swal from "sweetalert2";
 import PhoneInput from "react-phone-input-2";
 import MobileFooterSticky from "@/components/MobileFooterSticky";
 import Textarea from "@/shared/Textarea";
+import { toast, ToastContainer } from "react-toastify";
 export interface ListingStayDetailPageProps { }
 
 const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
@@ -252,8 +253,13 @@ const handleFeedback = async (values, { resetForm }) => {
       }),
     });
 
-    if (!res.ok) throw new Error("Failed to submit feedback");
-
+    if (res.ok){
+      toast.success("feedback Added successfully!");
+    } else {
+      toast.error("Failed to submit feedback");
+      throw new Error("Failed to submit feedback")
+    }
+   
     // Get the newly added feedback from the response and update the state
     const newFeedback = await res.json();
 
@@ -293,6 +299,7 @@ const handleViewMore = () => {
     return (
       <div className="listingSection__wrap">
         {/* HEADING */}
+       
         <h2 className="text-2xl font-semibold">Reviews ({totalFeedbacks} reviews)</h2>
         <div className="w-50 border-b border-neutral-200 dark:border-neutral-700"></div>
   
@@ -313,7 +320,7 @@ const handleViewMore = () => {
                   placeholder="Enter your email"
                   className="h-10 px-4 py-3 rounded-3xl w-full"
                 />
-                <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+                <ErrorMessage name="email" component="div" className="text-red-500 text-sm pl-2 pt-2" />
   
                 <Field
                   as="textarea"
@@ -321,7 +328,7 @@ const handleViewMore = () => {
                   placeholder="Share your thoughts ..."
                   className="w-full px-4 py-3 rounded-3xl mt-4"
                 />
-                <ErrorMessage name="comment" component="div" className="text-red-500 text-sm" />
+                <ErrorMessage name="comment" component="div" className="text-red-500 text-sm pl-2 " />
   
                 <ButtonPrimary type="submit" className="w-full mt-4" disabled={isSubmitting}>
                   Submit
@@ -334,7 +341,7 @@ const handleViewMore = () => {
         {/* Comments */}
         <div className="divide-y divide-neutral-100 dark:divide-neutral-800">
           {feedbacks?.slice(0, visibleFeedbacks).map((item, key) => (
-            <CommentListing key={key} className="py-8" data={item}  fetchUpdatedFeedbacks={fetchUpdatedFeedbacks} />
+            <CommentListing key={item._id || index} className="py-8" data={item}  fetchUpdatedFeedbacks={fetchUpdatedFeedbacks} />
           ))}
   
           {totalFeedbacks > 5 && (

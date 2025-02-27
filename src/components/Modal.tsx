@@ -24,8 +24,11 @@ const Modal: React.FC<ModalProps> = ({ title, children, onClose }) => {
         </div>
 
         {/* Modal Footer */}
-        <div className="mt-4 flex justify-end">
-          <button onClick={onClose} className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
+        <div className="mt-4 flex justify-end space-x-2">
+          <button
+            onClick={onClose}
+            className="px-6 py-2 text-white bg-blue-600  shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 rounded-full"
+          >
             Close
           </button>
         </div>

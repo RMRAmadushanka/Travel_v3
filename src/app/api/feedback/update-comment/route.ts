@@ -1,24 +1,24 @@
 import { NextResponse } from "next/server";
-import connectToDatabase  from "@/utils/db";
+import connectToDatabase from "@/utils/db";
 import { Feedback } from "@/models/Feedback";
 
 export async function PATCH(req: Request) {
   try {
-    const { email, newComment } = await req.json();
+    const { feedbackId, newComment } = await req.json();
 
     // Ensure DB connection
     await connectToDatabase();
 
-    // Find and update feedback based on email
+    // Find and update feedback based on feedbackId
     const updatedFeedback = await Feedback.findOneAndUpdate(
-      { email },
+      { _id: feedbackId },  // Search by feedbackId
       { comment: newComment },
       { new: true }
     );
 
     if (!updatedFeedback) {
       return NextResponse.json(
-        { message: "No feedback found for this email" },
+        { message: "No feedback found for this ID" },
         { status: 404 }
       );
     }

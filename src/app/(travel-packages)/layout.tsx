@@ -1,11 +1,11 @@
-import BgGlassmorphism from "@/components/BgGlassmorphism";
-import MobileFooterSticky from "@/components/MobileFooterSticky";
 import React, { ReactNode } from "react";
+import { ToastContainer } from "react-toastify";
+
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <div>
-      
+       <ToastContainer/>
       {children}
   
     </div>

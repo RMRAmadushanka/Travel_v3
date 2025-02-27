@@ -4,29 +4,46 @@ import { Feedback } from "@/models/Feedback";
 
 export async function POST(req: Request) {
   try {
-    const { email } = await req.json();
+    const { email, packageId, userId } = await req.json();
+
+    if (!email || !packageId || !userId) {
+      return NextResponse.json(
+        { valid: false, message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
 
     // Ensure DB connection
     await connectToDatabase();
 
-    // Check if feedback exists with the given email
-    const feedback = await Feedback.findOne({ email });
+    // First, check if feedback exists with the given packageId
+    const feedback = await Feedback.findOne({ packageId });
 
-    if (feedback) {
+    if (!feedback) {
       return NextResponse.json(
-        { valid: true, message: "Email found" },
+        { valid: false, message: "Package ID not found" },
+        { status: 404 }
+      );
+    }
+
+    // Then, check if the userId and email match for this feedback
+    if (feedback.email === email && feedback.userId === userId) {
+      console.log("call", email);
+      
+      return NextResponse.json(
+        { valid: true, message: "User ID and email match for this package" },
         { status: 200 }
       );
     } else {
       return NextResponse.json(
-        { valid: false, message: "Email not found" },
+        { valid: false, message: "User verification failed (email or userId mismatch)" },
         { status: 404 }
       );
     }
   } catch (error) {
-    console.error("Error validating email:", error);
+    console.error("Error validating user:", error);
     return NextResponse.json(
-      { message: "Internal Server Error" },
+      { valid: false, message: "Internal Server Error" },
       { status: 500 }
     );
   }
