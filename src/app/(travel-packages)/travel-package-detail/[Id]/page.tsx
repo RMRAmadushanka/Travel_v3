@@ -25,6 +25,7 @@ import PhoneInput from "react-phone-input-2";
 import MobileFooterSticky from "@/components/MobileFooterSticky";
 import Textarea from "@/shared/Textarea";
 import { toast, ToastContainer } from "react-toastify";
+import Button from "@/shared/Button";
 export interface ListingStayDetailPageProps { }
 
 const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
@@ -53,6 +54,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
   const [feedbacks, setFeedbacks] = useState(packageData?.feedback || []);
   const [visibleFeedbacks, setVisibleFeedbacks] = useState(5);
   const [selectedRating, setSelectedRating] = useState(5);
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const fetchPackage = async () => {
       try {
@@ -99,7 +102,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
     if (packageData?.id) {
       fetchUpdatedFeedbacks();
     }
-  }, [packageData?.id]); 
+  }, [packageData?.id]);
   const sendEmail = (userDetails) => {
     const templateParams = {
       user_name: userDetails.name,
@@ -224,60 +227,60 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
     comment: Yup.string().min(10, "Comment must be at least 10 characters").required("Comment is required"),
   });
 
-// Runs when packageData.id changes
+  // Runs when packageData.id changes
 
-const fetchUpdatedFeedbacks = async () => {
-  try {
-    const response = await axios.get(`/api/feedback/${packageData.id}`);
-    setFeedbacks(response.data);  // Update feedback list
+  const fetchUpdatedFeedbacks = async () => {
+    try {
+      const response = await axios.get(`/api/feedback/${packageData.id}`);
+      setFeedbacks(response.data);  // Update feedback list
 
-  } catch (error) {
-    console.error("Error fetching feedbacks:", error);
-    setFeedbacks([]);
+    } catch (error) {
+      console.error("Error fetching feedbacks:", error);
+      setFeedbacks([]);
 
-  }
-};
-
-// Handle adding new feedback
-const handleFeedback = async (values, { resetForm }) => {
-  try {
-    const res = await fetch("/api/feedback", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        packageId: packageData?.id,
-        email: values.email,
-        comment: values.comment,
-        userName: values.email.split("@")[0],
-        rating: selectedRating,
-      }),
-    });
-
-    if (res.ok){
-      toast.success("feedback Added successfully!");
-    } else {
-      toast.error("Failed to submit feedback");
-      throw new Error("Failed to submit feedback")
     }
-   
-    // Get the newly added feedback from the response and update the state
-    const newFeedback = await res.json();
+  };
 
-    // Append new feedback to the current list
-    setFeedbacks((prevFeedbacks) => [newFeedback, ...prevFeedbacks]);
-    setSelectedRating(5)
+  // Handle adding new feedback
+  const handleFeedback = async (values, { resetForm }) => {
+    try {
+      const res = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          packageId: packageData?.id,
+          email: values.email,
+          comment: values.comment,
+          userName: values.email.split("@")[0],
+          rating: selectedRating,
+        }),
+      });
 
-    resetForm();  // Reset the form after submission
-  } catch (error) {
-    console.error(error);
-  }
-};
+      if (res.ok) {
+        toast.success("feedback Added successfully!");
+      } else {
+        toast.error("Failed to submit feedback");
+        throw new Error("Failed to submit feedback")
+      }
 
-const handleViewMore = () => {
-  setVisibleFeedbacks((prev) =>
-    prev === visibleFeedbacks ? feedbacks.length : 5
-  );
-};
+      // Get the newly added feedback from the response and update the state
+      const newFeedback = await res.json();
+
+      // Append new feedback to the current list
+      setFeedbacks((prevFeedbacks) => [newFeedback, ...prevFeedbacks]);
+      setSelectedRating(5)
+
+      resetForm();  // Reset the form after submission
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleViewMore = () => {
+    setVisibleFeedbacks((prev) =>
+      prev === visibleFeedbacks ? feedbacks.length : 5
+    );
+  };
 
 
   //Feedback section
@@ -295,14 +298,14 @@ const handleViewMore = () => {
       console.log("User selected rating:", newRating);
       // You can use this value for API calls, state updates, etc.
     };
-  
+
     return (
       <div className="listingSection__wrap">
         {/* HEADING */}
-       
+
         <h2 className="text-2xl font-semibold">Reviews ({totalFeedbacks} reviews)</h2>
         <div className="w-50 border-b border-neutral-200 dark:border-neutral-700"></div>
-  
+
         {/* Content */}
         <Formik
           initialValues={{ email: "", comment: "" }}
@@ -311,8 +314,8 @@ const handleViewMore = () => {
         >
           {({ isSubmitting }) => (
             <Form className="space-y-5 gap-5">
-              <FiveStartIconForRate iconClass="w-6 h-6" className="space-x-0.5"  defaultPoint={selectedRating} onChange={handleRatingChange} />
-              
+              <FiveStartIconForRate iconClass="w-6 h-6" className="space-x-0.5" defaultPoint={selectedRating} onChange={handleRatingChange} />
+
               <div className="relative">
                 <Field
                   name="email"
@@ -321,7 +324,7 @@ const handleViewMore = () => {
                   className="h-10 px-4 py-3 rounded-3xl w-full"
                 />
                 <ErrorMessage name="email" component="div" className="text-red-500 text-sm pl-2 pt-2" />
-  
+
                 <Field
                   as="textarea"
                   name="comment"
@@ -329,7 +332,7 @@ const handleViewMore = () => {
                   className="w-full px-4 py-3 rounded-3xl mt-4"
                 />
                 <ErrorMessage name="comment" component="div" className="text-red-500 text-sm pl-2 " />
-  
+
                 <ButtonPrimary type="submit" className="w-full mt-4" disabled={isSubmitting}>
                   Submit
                 </ButtonPrimary>
@@ -337,13 +340,13 @@ const handleViewMore = () => {
             </Form>
           )}
         </Formik>
-  
+
         {/* Comments */}
         <div className="divide-y divide-neutral-100 dark:divide-neutral-800">
           {feedbacks?.slice(0, visibleFeedbacks).map((item, key) => (
-            <CommentListing key={item._id || index} className="py-8" data={item}  fetchUpdatedFeedbacks={fetchUpdatedFeedbacks} />
+            <CommentListing key={item._id || index} className="py-8" data={item} fetchUpdatedFeedbacks={fetchUpdatedFeedbacks} />
           ))}
-  
+
           {totalFeedbacks > 5 && (
             <div className="pt-8">
               <ButtonSecondary onClick={handleViewMore}>
@@ -414,6 +417,7 @@ const handleViewMore = () => {
     const initialTotal = initialPricePerNight * initialDuration;
 
     const handleReserve = async (values, { resetForm }) => {
+      setIsLoading(true);
       const userDetails = {
         email: email,
         name: name,
@@ -481,7 +485,7 @@ const handleViewMore = () => {
           setGuestAdults(0); // Reset guest adults state
           setGuestChildren(0); // Reset guest children state
           setGuestInfants(0); // Reset guest infants state
-
+          setPhoneNumber("");
           setStartDate(null); // Reset startDate state
           setEndDate(null); // Reset endDate state
           setPickupLocation(''); // Reset pickupLocation state
@@ -494,6 +498,8 @@ const handleViewMore = () => {
           title: 'Reservation Failed',
           text: 'There was an issue with your reservation. Please try again.',
         });
+      }finally {
+        setIsLoading(false); // Stop loading after request completes
       }
     };
 
@@ -675,7 +681,8 @@ const handleViewMore = () => {
             </div>
 
             {/* SUBMIT */}
-            <ButtonPrimary type="submit">Reserve</ButtonPrimary>
+     
+            <Button className="bg-blue-600 text-gray-50" type="submit" loading={isLoading} disabled={isLoading}>Reserve</Button>
           </Form>
         )}
       </Formik>

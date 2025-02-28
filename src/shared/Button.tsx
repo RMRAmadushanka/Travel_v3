@@ -32,8 +32,9 @@ const Button: FC<ButtonProps> = ({
   loading,
   onClick = () => {},
 }) => {
-  const CLASSES = `nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors ${fontSize} ${sizeClass} ${translate} ${className} `;
-
+  const CLASSES = `nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors ${fontSize} ${sizeClass} ${translate} ${className} ${
+    disabled || loading ? "bg-gray-400 text-gray-200 cursor-not-allowed" : ""
+  }`;
   const _renderLoading = () => {
     return (
       <svg
