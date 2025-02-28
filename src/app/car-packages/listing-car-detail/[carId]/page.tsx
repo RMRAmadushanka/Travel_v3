@@ -22,6 +22,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
 import axios from "axios";
+import Button from "@/shared/Button";
 const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
   const [carData, setCarData] = useState<any>(null); // Replace `any` with your car data type if available
   const [loading, setLoading] = useState(true);
@@ -395,6 +396,7 @@ console.log(carData);
 
 
     const handleReserve = async (values, { resetForm }) => {
+      setIsLoading(true);
           const userDetails = {
             email: values.email,
             carName: carData?.vehicleName || "Default Car Name",
@@ -454,6 +456,8 @@ console.log(carData);
               title: 'Reservation Failed',
               text: 'There was an issue with your reservation. Please try again.',
             });
+          }finally {
+            setIsLoading(false); // Stop loading after request completes
           }
         };
 
@@ -550,7 +554,8 @@ console.log(carData);
             </div>
 
             {/* SUBMIT */}
-            <ButtonPrimary type="submit">Reserve</ButtonPrimary>
+            <Button className="bg-blue-600 text-gray-50" type="submit" loading={isLoading} disabled={isLoading}>Reserve</Button>
+  
           </Form>
         )}
       </Formik>
@@ -640,7 +645,7 @@ console.log(carData);
           {renderSection6()}
           {renderSection8()}
         </div>
-        <div className="hidden lg:block flex-grow mt-14 lg:mt-0 min-h-screen">
+        <div className=" lg:block flex-grow mt-14 lg:mt-0 min-h-screen">
           <div className="sticky top-28">{renderSidebarDetail()}</div>
         </div>
       </main>

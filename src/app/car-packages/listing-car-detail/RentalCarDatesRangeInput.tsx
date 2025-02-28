@@ -11,7 +11,7 @@ import ClearDataButton from "@/app/(client-components)/(HeroSearchForm)/ClearDat
 
 export interface RentalCarDatesRangeInputProps {
   className?: string;
-  onDaysChange: (days: number, startDate: Date | null, endDate: Date | null) => void; // Updated function signature
+  onDaysChange: (days: number, startDate: Date | null, endDate: Date | null) => void;
   reset?: () => void;
 }
 
@@ -33,14 +33,19 @@ const RentalCarDatesRangeInput: FC<RentalCarDatesRangeInputProps> = ({
     reset();
     setStartDate(null);
     setEndDate(null);
-    onDaysChange(0, null, null); // Reset values
+    onDaysChange(0, null, null);
   }, [reset]);
 
-  const onChangeDate = (dates: [Date | null, Date | null]) => {
+  const onChangeDate = (dates: [Date | null, Date | null], close: () => void) => {
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
-    onDaysChange(calculateDateRange(start, end), start, end); // Pass start & end dates
+    onDaysChange(calculateDateRange(start, end), start, end);
+
+    // Close dropdown if both start & end dates are selected
+    if (start && end) {
+      close();
+    }
   };
 
   const renderInput = () => {
@@ -66,12 +71,12 @@ const RentalCarDatesRangeInput: FC<RentalCarDatesRangeInputProps> = ({
 
   return (
     <Popover className={`RentalCarDatesRangeInput relative flex w-full ${className}`}>
-      {({ open }) => (
+      {({ open, close }) => (
         <>
           <div className={`flex-1 flex items-center focus:outline-none rounded-2xl ${open ? "shadow-lg" : ""}`}>
             <Popover.Button className="flex-1 flex relative p-3 items-center space-x-3 focus:outline-none">
               {renderInput()}
-              {startDate && open && <ClearDataButton onClick={() => onChangeDate([null, null])} />}
+              {startDate && open && <ClearDataButton onClick={() => onChangeDate([null, null], close)} />}
             </Popover.Button>
           </div>
           <Transition
@@ -83,11 +88,12 @@ const RentalCarDatesRangeInput: FC<RentalCarDatesRangeInputProps> = ({
             leaveFrom="opacity-100 translate-y-0"
             leaveTo="opacity-0 translate-y-1"
           >
-            <Popover.Panel className="absolute z-10 mt-3 top-full right-0 xl:-right-10 w-screen max-w-sm px-4 sm:px-0 lg:max-w-3xl">
+            <Popover.Panel className="absolute z-10 mt-3 top-full w-screen px-4 sm:px-0 max-w-2xl 
+              sm:right-0 sm:xl:-right-10 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0">
               <div className="overflow-hidden rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5 bg-white dark:bg-neutral-800 p-8">
                 <DatePicker
                   selected={startDate}
-                  onChange={onChangeDate}
+                  onChange={(dates) => onChangeDate(dates, close)}
                   startDate={startDate}
                   endDate={endDate}
                   selectsRange

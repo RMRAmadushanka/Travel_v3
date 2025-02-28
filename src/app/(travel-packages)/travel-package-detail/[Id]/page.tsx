@@ -754,10 +754,10 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
         </div>
 
         {/* SIDEBAR */}
-        <div className="hidden lg:block flex-grow mt-14 lg:mt-0 min-h-screen">
+        <div className=" lg:block flex-grow mt-14 lg:mt-0 min-h-screen">
           <div className="sticky top-28">{renderSidebar()}</div>
         </div>
-        <MobileFooterSticky />
+
       </main>
     </div>
   );
