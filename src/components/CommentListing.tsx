@@ -25,7 +25,7 @@ export interface CommentListingProps {
 }
 
 const CommentListing: FC<CommentListingProps> = ({ className = "", data, hasListingTitle, fetchUpdatedFeedbacks }) => {
- 
+
 
   const [isEmailPopupOpen, setIsEmailPopupOpen] = useState(false);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
@@ -40,7 +40,7 @@ const CommentListing: FC<CommentListingProps> = ({ className = "", data, hasList
   const userId = data?.userId;
   const commentId = data?._id;
   console.log(data);
-  
+
   // Handle Email Verification
   const handleVerifyEmail = async () => {
     setEmailError(""); // Reset the error message before checking
@@ -78,7 +78,7 @@ const CommentListing: FC<CommentListingProps> = ({ className = "", data, hasList
       toast.error("Please verify your email before updating the comment.");
       return;
     }
-  
+
 
 
     try {
@@ -137,13 +137,18 @@ const CommentListing: FC<CommentListingProps> = ({ className = "", data, hasList
 
 
   return (
-    <div className={`nc-CommentListing flex space-x-4 group relative ${className}`} data-nc-id="CommentListing">
-      <div className="pt-0.5">
-        <Avatar sizeClass="h-10 w-10 text-lg" radius="rounded-full" userName={data?.userName} imgUrl={""} />
-      </div>
-      <div className="flex-grow relative">
-        <div className="flex justify-between space-x-3">
-          <div className="flex flex-col">
+    <div className={`nc-CommentListing group relative   ${className}`} data-nc-id="CommentListing">
+      {/* Avatar */}
+
+
+      {/* Comment Content */}
+      <div className="flex-grow">
+        <div className="flex ">
+          <div >
+            <Avatar sizeClass="h-10 w-10 text-lg" radius="rounded-full" userName={data?.userName} imgUrl={""} />
+          </div>
+          {/* Username and Rating */}
+          <div className="flex items-center pl-4">
             <div className="text-sm font-semibold">
               <span>{data?.userName}</span>
               {hasListingTitle && (
@@ -153,24 +158,32 @@ const CommentListing: FC<CommentListingProps> = ({ className = "", data, hasList
                 </>
               )}
             </div>
-          </div>
-          <div className="flex text-yellow-500">{Array.from({ length: 5 }, (_, i) => i < data?.rating ? <StarIcon key={i} className="w-4 h-4 text-yellow-500" /> : "")}</div>
-        </div>
-        <span className="block mt-3 text-neutral-6000 dark:text-neutral-300">{data?.comment}</span>
 
-        <div className="absolute bottom-0 right-0 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          </div>
+        </div>
+
+        <div className="flex justify-end text-yellow-500">
+          {Array.from({ length: 5 }, (_, i) => i < data?.rating ? <StarIcon key={i} className="w-4 h-4 text-yellow-500" /> : "")}
+        </div>
+        {/* Comment */}
+        <span className="block mt-1 text-neutral-600 dark:text-neutral-300 break-words">
+          {data?.comment}
+        </span>
+
+        {/* Edit/Delete Buttons */}
+        <div className="absolute bottom-0 right-0 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pt-4">
           <button onClick={() => {
-            setNewComment(data?.comment || "");  // Set the current comment for editing
-            setIsEmailPopupOpen(true); // Open the email verification popup
-            setActionType("edit");  // Set the action to 'edit'
+            setNewComment(data?.comment || "");
+            setIsEmailPopupOpen(true);
+            setActionType("edit");
           }} className="p-1 text-gray-500 hover:text-blue-500">
             <PencilIcon className="w-4 h-4" />
           </button>
 
           <button onClick={() => {
-            setEmail("");  // Clear email when opening delete popup
-            setIsEmailPopupOpen(true);  // Open the email verification popup
-            setActionType("delete");  // Set the action to 'delete'
+            setEmail("");
+            setIsEmailPopupOpen(true);
+            setActionType("delete");
           }} className="p-1 text-gray-500 hover:text-red-500">
             <TrashIcon className="w-4 h-4" />
           </button>
@@ -179,96 +192,98 @@ const CommentListing: FC<CommentListingProps> = ({ className = "", data, hasList
 
 
 
+
+
       {isEmailPopupOpen && (
         <Modal title="Verify Email" onClose={() => setIsEmailPopupOpen(false)}>
-        <div className="mb-4 p-4 bg-yellow-200 text-yellow-800 flex items-center rounded">
-          <FaExclamationTriangle className="mr-2 text-xl" />
-          <p>
-            {actionType === "delete"
-              ? "Please verify your email to be able to delete your feedback."
-              : "Please verify your email to be able to update your feedback."}
-          </p>
-        </div>
-    
-        <Formik
-          initialValues={{ email: "" }}
-          validationSchema={emailValidationSchema}
-          onSubmit={async (values, { setSubmitting, setFieldError }) => {
-            try {
-              const response = await fetch("/api/feedback/verify-email", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: values.email, packageId, userId }),
-              });
-    
-              const data = await response.json();
-    
-              if (data.valid) {
-                setIsEmailValid(true);
-                setIsEmailPopupOpen(false);
-                setEmail(values.email);
-    
-                if (actionType === "edit") {
-                  setIsEditPopupOpen(true);
-                } else if (actionType === "delete") {
-                  setIsDeleteConfirmPopupOpen(true);
+          <div className="mb-4 p-4 bg-yellow-200 text-yellow-800 flex items-center rounded">
+            <FaExclamationTriangle className="mr-2 text-xl" />
+            <p>
+              {actionType === "delete"
+                ? "Please verify your email to be able to delete your feedback."
+                : "Please verify your email to be able to update your feedback."}
+            </p>
+          </div>
+
+          <Formik
+            initialValues={{ email: "" }}
+            validationSchema={emailValidationSchema}
+            onSubmit={async (values, { setSubmitting, setFieldError }) => {
+              try {
+                const response = await fetch("/api/feedback/verify-email", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ email: values.email, packageId, userId }),
+                });
+
+                const data = await response.json();
+
+                if (data.valid) {
+                  setIsEmailValid(true);
+                  setIsEmailPopupOpen(false);
+                  setEmail(values.email);
+
+                  if (actionType === "edit") {
+                    setIsEditPopupOpen(true);
+                  } else if (actionType === "delete") {
+                    setIsDeleteConfirmPopupOpen(true);
+                  }
+                } else {
+                  setFieldError("email", "Invalid email. Please enter the correct email.");
                 }
-              } else {
-                setFieldError("email", "Invalid email. Please enter the correct email.");
+              } catch (error) {
+                console.error("Error validating email:", error);
+                setFieldError("email", "Error validating email. Please try again.");
               }
-            } catch (error) {
-              console.error("Error validating email:", error);
-              setFieldError("email", "Error validating email. Please try again.");
-            }
-    
-            setSubmitting(false);
-          }}
-        >
-          {({ isSubmitting }) => (
-            <Form>
-              <Field
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                className="border p-2 w-full"
-              />
-              <ErrorMessage name="email" component="p" className="text-red-500 text-sm mt-2" />
-    
-              <button
-  type="submit"
-  className="mt-3 bg-green-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-200 w-full"
-  disabled={isSubmitting}
->
-                {isSubmitting ? "Verifying..." : "Submit"}
-              </button>
-            </Form>
-          )}
-        </Formik>
-      </Modal>
-    )}
-    
-    {/* Edit Comment Popup */}
-    {isEditPopupOpen && (
-      <Modal title="Edit Comment" onClose={() => setIsEditPopupOpen(false)}>
-        <textarea
-          className="border p-2 w-full"
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-        />
-        <button onClick={handleUpdateComment} className="mt-3 bg-green-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-200 w-full">
-          Update
-        </button>
-      </Modal>
-    )}
-    
-    {/* Delete Confirmation Popup */}
-    {isDeleteConfirmPopupOpen && (
-      <Modal title="Confirm Deletion" onClose={() => setIsDeleteConfirmPopupOpen(false)}>
-        <p>Are you sure you want to delete this comment?</p>
-        <button onClick={handleDeleteComment} className="mt-3 bg-red-500 text-white px-6 py-2 rounded-full shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-700 focus:ring-opacity-50 transition duration-200 w-full">
-          Delete
-        </button>
-      </Modal>
+
+              setSubmitting(false);
+            }}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <Field
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  className="border p-2 w-full"
+                />
+                <ErrorMessage name="email" component="p" className="text-red-500 text-sm mt-2" />
+
+                <button
+                  type="submit"
+                  className="mt-3 bg-green-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-200 w-full"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Verifying..." : "Submit"}
+                </button>
+              </Form>
+            )}
+          </Formik>
+        </Modal>
+      )}
+
+      {/* Edit Comment Popup */}
+      {isEditPopupOpen && (
+        <Modal title="Edit Comment" onClose={() => setIsEditPopupOpen(false)}>
+          <textarea
+            className="border p-2 w-full"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          />
+          <button onClick={handleUpdateComment} className="mt-3 bg-green-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-200 w-full">
+            Update
+          </button>
+        </Modal>
+      )}
+
+      {/* Delete Confirmation Popup */}
+      {isDeleteConfirmPopupOpen && (
+        <Modal title="Confirm Deletion" onClose={() => setIsDeleteConfirmPopupOpen(false)}>
+          <p>Are you sure you want to delete this comment?</p>
+          <button onClick={handleDeleteComment} className="mt-3 bg-red-500 text-white px-6 py-2 rounded-full shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-700 focus:ring-opacity-50 transition duration-200 w-full">
+            Delete
+          </button>
+        </Modal>
       )}
     </div>
   );
