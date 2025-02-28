@@ -41,36 +41,7 @@ const CommentListing: FC<CommentListingProps> = ({ className = "", data, hasList
   const commentId = data?._id;
   console.log(data);
 
-  // Handle Email Verification
-  const handleVerifyEmail = async () => {
-    setEmailError(""); // Reset the error message before checking
-
-    try {
-      const response = await fetch("/api/feedback/verify-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await response.json();
-
-      if (data.valid) {
-        setIsEmailValid(true);
-        setIsEmailPopupOpen(false);
-
-        if (actionType === "edit") {
-          setIsEditPopupOpen(true);
-        } else if (actionType === "delete") {
-          setIsDeleteConfirmPopupOpen(true);
-        }
-      } else {
-        setEmailError("Invalid email. Please enter the correct email."); // Set error message
-      }
-    } catch (error) {
-      console.error("Error validating email:", error);
-      setEmailError("Error validating email. Please try again.");
-    }
-  };
+  
 
   // Handle Update Comment (only after email verification)
   const handleUpdateComment = async () => {

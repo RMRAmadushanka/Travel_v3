@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import connectToDatabase from "@/utils/db";
 import { Feedback } from "@/models/Feedback";
-import crypto from "crypto"; 
+
 // GET request to fetch all feedbacks for a given packageId
 export async function GET(req: Request) {
   try {
@@ -53,7 +53,6 @@ export async function POST(req: Request) {
       comment, 
       rating 
     });
-
     return NextResponse.json(newFeedback, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: "Failed to save feedback" }, { status: 500 });

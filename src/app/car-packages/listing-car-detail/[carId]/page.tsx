@@ -2,7 +2,7 @@
 
 import React, { FC, Fragment, useEffect, useState } from "react";
 import { ArrowRightIcon, Squares2X2Icon } from "@heroicons/react/24/outline";
-import CommentListing from "@/components/CommentListing";
+import CommentListing from "@/components/CarCommentListing";
 import FiveStartIconForRate from "@/components/FiveStartIconForRate";
 import StartRating from "@/components/StartRating";
 import Badge from "@/shared/Badge";
@@ -16,10 +16,12 @@ import RentalCarDatesRangeInput from "../RentalCarDatesRangeInput";
 import { Route } from "next";
 import { client } from "@/utils/client";
 import emailjs from '@emailjs/browser';
+import { toast, ToastContainer } from "react-toastify";
 export interface ListingCarDetailPageProps { }
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
+import axios from "axios";
 const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
   const [carData, setCarData] = useState<any>(null); // Replace `any` with your car data type if available
   const [loading, setLoading] = useState(true);
@@ -31,6 +33,13 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
   const [endDate, setEndDate] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [totalPrice, setTotalPrice] = useState(0);
+
+
+    const [feedbacks, setFeedbacks] = useState(carData?.feedback || []);
+    const [visibleFeedbacks, setVisibleFeedbacks] = useState(5);
+    const [selectedRating, setSelectedRating] = useState(5);
+    const [isLoading, setIsLoading] = useState(false);
+
 
   const thisPathname = usePathname();
   const router = useRouter();
@@ -84,6 +93,12 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
     }
   }, [carId]);
 
+    useEffect(() => {
+      if (carData?.carId) {
+        fetchUpdatedFeedbacks();
+      }
+    }, [carData?.carId]);
+
   if (loading) return <div>Loading...</div>;
   if (!carData) return <div>Car not found</div>;
 
@@ -114,6 +129,8 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
         console.error("Error sending email");
       });
   };
+
+  
   const renderSection1 = () => {
     const reviewStart =
       carData?.feedback.length > 0
@@ -202,42 +219,132 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
     );
   };
 
+  const feedbackValidationSchema = Yup.object({
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    comment: Yup.string().min(10, "Comment must be at least 10 characters").required("Comment is required"),
+  });
 
+  // Runs when packageData.id changes
+
+  const fetchUpdatedFeedbacks = async () => {
+    try {
+      const response = await axios.get(`/api/car-feedback/${carData.carId}`);
+      setFeedbacks(response.data);  // Update feedback list
+
+    } catch (error) {
+      console.error("Error fetching feedbacks:", error);
+      setFeedbacks([]);
+
+    }
+  };
+
+  // Handle adding new feedback
+  const handleFeedback = async (values, { resetForm }) => {
+    try {
+      const res = await fetch("/api/car-feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          carId: carData?.carId,
+          email: values.email,
+          comment: values.comment,
+          userName: values.email.split("@")[0],
+          rating: selectedRating,
+        }),
+      });
+
+      if (res.ok) {
+        toast.success("feedback Added successfully!");
+      } else {
+        toast.error("Failed to submit feedback");
+        throw new Error("Failed to submit feedback")
+      }
+
+      // Get the newly added feedback from the response and update the state
+      const newFeedback = await res.json();
+
+      // Append new feedback to the current list
+      setFeedbacks((prevFeedbacks) => [newFeedback, ...prevFeedbacks]);
+      setSelectedRating(5)
+
+      resetForm();  // Reset the form after submission
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+console.log(carData);
 
   const renderSection6 = () => {
+
+    const totalFeedbacks = feedbacks?.length || 0;
+
+    const handleViewMore = () => {
+      setVisibleFeedbacks(visibleFeedbacks === 5 ? totalFeedbacks : 5);
+    };
+
+
+    const handleRatingChange = (newRating: number) => {
+      setSelectedRating(newRating);
+      console.log("User selected rating:", newRating);
+      // You can use this value for API calls, state updates, etc.
+    };
+
     return (
       <div className="listingSection__wrap">
-        {/* reviewCount": count(feedback)*/}
-        <h2 className="text-2xl font-semibold">Reviews ({carData?.feedback.length || 0})</h2>
-        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+        {/* HEADING */}
+
+        <h2 className="text-2xl font-semibold">Reviews ({totalFeedbacks} reviews)</h2>
+        <div className="w-50 border-b border-neutral-200 dark:border-neutral-700"></div>
 
         {/* Content */}
-        <div className="space-y-5">
-          <FiveStartIconForRate iconClass="w-6 h-6" className="space-x-0.5" />
-          <div className="relative">
-            <Input
-              fontClass=""
-              sizeClass="h-16 px-4 py-3"
-              rounded="rounded-3xl"
-              placeholder="Share your thoughts ..."
-            />
-            <ButtonCircle
-              className="absolute right-2 top-1/2 transform -translate-y-1/2"
-              size=" w-12 h-12 "
-            >
-              <ArrowRightIcon className="w-5 h-5" />
-            </ButtonCircle>
-          </div>
-        </div>
+        <Formik
+          initialValues={{ email: "", comment: "" }}
+          validationSchema={feedbackValidationSchema}
+          onSubmit={handleFeedback}
+        >
+          {({ isSubmitting }) => (
+            <Form className="space-y-5 gap-5">
+              <FiveStartIconForRate iconClass="w-6 h-6" className="space-x-0.5" defaultPoint={selectedRating} onChange={handleRatingChange} />
 
-        {/* map the Feedback here */}
+              <div className="relative">
+                <Field
+                  name="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  className="h-10 px-4 py-3 rounded-3xl w-full"
+                />
+                <ErrorMessage name="email" component="div" className="text-red-500 text-sm pl-2 pt-2" />
+
+                <Field
+                  as="textarea"
+                  name="comment"
+                  placeholder="Share your thoughts ..."
+                  className="w-full px-4 py-3 rounded-3xl mt-4"
+                />
+                <ErrorMessage name="comment" component="div" className="text-red-500 text-sm pl-2 " />
+
+                <ButtonPrimary type="submit" className="w-full mt-4" disabled={isSubmitting}>
+                  Submit
+                </ButtonPrimary>
+              </div>
+            </Form>
+          )}
+        </Formik>
+
+        {/* Comments */}
         <div className="divide-y divide-neutral-100 dark:divide-neutral-800">
-          {carData?.feedback.map((item, key) => {
-            return <CommentListing key={key} className="py-8" data={item} />;
-          })}
-          <div className="pt-8">
-            <ButtonSecondary>View more {carData?.feedback.length || 0} reviews</ButtonSecondary>
-          </div>
+          {feedbacks?.slice(0, visibleFeedbacks).map((item, key) => (
+            <CommentListing key={item.carId || index} className="py-8" data={item} fetchUpdatedFeedbacks={fetchUpdatedFeedbacks} />
+          ))}
+
+          {totalFeedbacks > 5 && (
+            <div className="pt-8">
+              <ButtonSecondary onClick={handleViewMore}>
+                {visibleFeedbacks === 5 ? `View more ${totalFeedbacks - 5} reviews` : "Show Less"}
+              </ButtonSecondary>
+            </div>
+          )}
         </div>
       </div>
     );

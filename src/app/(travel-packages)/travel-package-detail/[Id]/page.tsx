@@ -276,11 +276,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
     }
   };
 
-  const handleViewMore = () => {
-    setVisibleFeedbacks((prev) =>
-      prev === visibleFeedbacks ? feedbacks.length : 5
-    );
-  };
+
 
 
   //Feedback section
