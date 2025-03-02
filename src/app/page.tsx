@@ -85,7 +85,7 @@ function PageHome() {
         </div>
         <SectionGridFeaturePlaces />
         <SectionVideos />
-     <FloatingWhatsApp phoneNumber="+94701474424" accountName="Ceylon Travels Guid "/>
+     <FloatingWhatsApp phoneNumber="+94766694545" accountName="Ceylon Travels Guid "/>
       </div>
     </main>
   );
