@@ -8,10 +8,11 @@ const ButtonSubmit: FC<Props> = ({ onClick }) => {
   return (
     <button
       type="button"
-      className="h-14 md:h-16 sm:h-16 sm:w-16 p-2 w-full md:w-16 rounded-full bg-sky-600 hover:bg-sky-400 flex items-center justify-center text-neutral-50 focus:outline-none"
+      className="h-14 w-14 md:h-16 md:w-16 sm:h-16 sm:w-16 aspect-square 
+                 rounded-full bg-sky-600 sm:bg-sky-500 hover:bg-sky-400 sm:hover:bg-sky-300 
+                 flex items-center justify-center text-neutral-50 focus:outline-none"
       onClick={onClick}
     >
-     
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-6 w-6"

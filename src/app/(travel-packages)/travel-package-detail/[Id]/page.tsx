@@ -494,7 +494,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
           title: 'Reservation Failed',
           text: 'There was an issue with your reservation. Please try again.',
         });
-      }finally {
+      } finally {
         setIsLoading(false); // Stop loading after request completes
       }
     };
@@ -677,7 +677,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
             </div>
 
             {/* SUBMIT */}
-     
+
             <Button className="bg-blue-600 text-gray-50" type="submit" loading={isLoading} disabled={isLoading}>Reserve</Button>
           </Form>
         )}
@@ -738,10 +738,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
               Show all photos
             </span>
           </button>
-
         </div>
       </header>
-
       {/* MAIN */}
       <main className=" relative z-10 mt-11 flex flex-col lg:flex-row  ">
         {/* CONTENT */}
@@ -750,9 +748,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
           {renderSection4()}
           {renderSection8()}
           {renderSection6()}
-
         </div>
-
         {/* SIDEBAR */}
         <div className=" lg:block flex-grow mt-14 lg:mt-0 min-h-screen">
           <div className="sticky top-28">{renderSidebar()}</div>

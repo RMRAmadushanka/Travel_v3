@@ -129,20 +129,20 @@ const LocationInput: FC<LocationInputProps> = ({
             <MapPinIcon className="w-5 h-5 lg:w-7 lg:h-7" />
           </div>
           <div className="flex-grow">
-          <input
-  className="block w-full bg-transparent border-none focus:ring-0 focus:outline-none focus:placeholder-neutral-300 
+            <input
+              className="block w-full bg-transparent border-none focus:ring-0 focus:outline-none focus:placeholder-neutral-300 
              xl:text-lg font-semibold placeholder:text-sm sm:placeholder:text-base md:placeholder:text-lg 
              placeholder-neutral-800 dark:placeholder-neutral-200 truncate"
-  placeholder={placeHolder}
-  value={searchValue}
-  autoFocus={showSuggestions}
-  onChange={(e) => {
-    e.preventDefault();
-    setSearchValue(e.currentTarget.value);
-    setShowSuggestions(true);
-  }}
-  ref={inputRef}
-/>
+              placeholder={placeHolder}
+              value={searchValue}
+              autoFocus={showSuggestions}
+              onChange={(e) => {
+                e.preventDefault();
+                setSearchValue(e.currentTarget.value);
+                setShowSuggestions(true);
+              }}
+              ref={inputRef}
+            />
 
           </div>
 
@@ -156,10 +156,10 @@ const LocationInput: FC<LocationInputProps> = ({
         </div>
 
         <div className="pr-2 xl:pr-4">
-        <ButtonSubmit onClick={(e) => {
-  e.preventDefault();
-  handleNavigate();
-}} />
+          <ButtonSubmit onClick={(e) => {
+            e.preventDefault();
+            handleNavigate();
+          }} />
         </div>
       </div>
 

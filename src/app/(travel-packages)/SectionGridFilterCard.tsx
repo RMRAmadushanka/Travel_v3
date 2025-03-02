@@ -55,7 +55,8 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
         locations: item.locations,
         saleOff: item.saleOff,
       }));
-
+  
+      
       // Derive minimum and maximum prices dynamically
       const prices = mappedData.map((item:any) => item.price);
       const minPrice = Math.min(...prices);

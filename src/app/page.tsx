@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import SectionSubscribe2 from "@/components/SectionSubscribe2";
 import BgGlassmorphism from "@/components/BgGlassmorphism";
@@ -6,6 +7,7 @@ import SectionHero3 from "@/app/(server-components)/SectionHero3";
 import CardCategory6 from "@/components/CardCategory6";
 import SectionGridFeaturePlaces from "@/components/SectionGridFeaturePlaces";
 import SectionVideos from "@/components/SectionVideos";
+import { FloatingWhatsApp } from 'react-floating-whatsapp'
 
 const DEMO_CATS_2: TaxonomyType[] = [
   {
@@ -83,6 +85,7 @@ function PageHome() {
         </div>
         <SectionGridFeaturePlaces />
         <SectionVideos />
+     <FloatingWhatsApp phoneNumber="+94701474424" accountName="Ceylon Travels Guid "/>
       </div>
     </main>
   );
