@@ -6,6 +6,7 @@ import SectionSubscribe2 from "@/components/SectionSubscribe2";
 import React, { ReactNode } from "react";
 import SectionHeroArchivePage from "../(server-components)/SectionHeroArchivePage";
 import SectionOurFeatures from "@/components/SectionOurFeatures";
+import { ToastContainer } from "react-toastify";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
@@ -18,6 +19,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
       </div>
 
       {children}
+      <ToastContainer/>
     </div>
   );
 };

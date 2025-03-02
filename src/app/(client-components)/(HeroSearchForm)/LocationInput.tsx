@@ -108,7 +108,7 @@ const LocationInput: FC<LocationInputProps> = ({
       </div>
     ));
   };
-  console.log(`/listing-stay-map?location=${encodeURIComponent(searchValue)}`);
+
   const handleNavigate = () => {
 
 

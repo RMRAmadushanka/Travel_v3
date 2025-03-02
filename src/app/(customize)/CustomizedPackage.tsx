@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaCalendar } from 'react-icons/fa'; // Calendar icon from react-icons
+import { toast } from "react-toastify";
 
 const CustomizedPackage: FC = () => {
   const countryOptions = useMemo(() => countryList().getData(), []);
@@ -36,6 +37,9 @@ const CustomizedPackage: FC = () => {
       .min(1, "At least one day is required")
       .max(10, "You can only add up to 10 days"),
   });
+
+
+
 
   const [locations, setLocations] = useState([]);
 
@@ -91,21 +95,12 @@ const CustomizedPackage: FC = () => {
                 return response.json();
               })
               .then((data) => {
-                Swal.fire({
-                  icon: "success",
-                  title: "Request Submitted",
-                  text: "Your customized package request has been successfully submitted. Our team will contact you shortly!",
-                  confirmButtonText: "Okay",
-                });
+             
+                toast.success("Your customized package request has been successfully submitted. Our team will contact you shortly!");
                 resetForm();
               })
               .catch((error) => {
-                Swal.fire({
-                  icon: "error",
-                  title: "Request Submission Failed",
-                  text: "Something went wrong. Please try again later.",
-                  confirmButtonText: "Retry",
-                });
+                toast.error("Something went wrong. Please try again later.");
               })
               .finally(() => {
                 setSubmitting(false);
@@ -113,7 +108,7 @@ const CustomizedPackage: FC = () => {
           }}
         >
           {({ values, setFieldValue, errors }) => {
-            console.log(errors);
+
 
             return (
               <Form className="space-y-6">

@@ -35,7 +35,6 @@ function PageHome2() {
           }`
         );
         setCarData(data);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching car rental data:", error);
       }

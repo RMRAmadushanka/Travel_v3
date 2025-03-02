@@ -28,7 +28,7 @@ export async function POST(req: Request) {
 
     // Then, check if the userId and email match for this feedback
     if (feedback.email === email && feedback.userId === userId) {
-      console.log("call", email);
+
       
       return NextResponse.json(
         { valid: true, message: "User ID and email match for this package" },

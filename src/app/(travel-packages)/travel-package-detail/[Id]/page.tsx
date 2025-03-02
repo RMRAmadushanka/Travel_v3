@@ -291,7 +291,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 
     const handleRatingChange = (newRating: number) => {
       setSelectedRating(newRating);
-      console.log("User selected rating:", newRating);
+
       // You can use this value for API calls, state updates, etc.
     };
 
@@ -466,11 +466,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
         const [emailResult, apiResult] = await Promise.all([sendEmailPromise, apiCallPromise]);
 
         if (apiResult.success) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Reservation Successful',
-            text: `Your reservation for the ${packageData?.packageName} package has been successfully completed.`,
-          });
+ 
+          toast.success(`Your reservation for the ${packageData?.packageName} package has been successfully completed.`);
 
           // Reset the form after a successful reservation
           resetForm();
@@ -489,11 +486,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
           throw new Error('Error saving package or sending email');
         }
       } catch (error) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Reservation Failed',
-          text: 'There was an issue with your reservation. Please try again.',
-        });
+        toast.error("There was an issue with your reservation. Please try again.");
       } finally {
         setIsLoading(false); // Stop loading after request completes
       }

@@ -40,7 +40,7 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
   const [filteredData, setFilteredData] = useState<TravelPackageCardType[]>([]);
   const [priceRange, setPriceRange] = useState<number[] | null>(null); // Placeholder state
   const [minMax, setMinMax] = useState<number[] | null>(null);
-  console.log(data.length);
+
 
   useEffect(() => {
     const fetchSanityData = async () => {

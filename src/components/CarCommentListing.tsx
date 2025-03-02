@@ -39,7 +39,7 @@ const CommentListing: FC<CommentListingProps> = ({ className = "", data, hasList
   const pckEmail = data?.email;
   const userId = data?.userId;
   const commentId = data?._id;
-  console.log(data);
+
 
   
 

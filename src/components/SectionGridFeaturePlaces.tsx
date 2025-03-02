@@ -85,7 +85,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
     fetchSanityData();
   }, []);
 
-  console.log(data);
+
   
 
   const renderCard = (stay: StayDataType) => {

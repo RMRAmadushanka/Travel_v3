@@ -36,10 +36,9 @@ const CommentListing: FC<CommentListingProps> = ({ className = "", data, hasList
   const [newComment, setNewComment] = useState(data?.comment || "");
   const [actionType, setActionType] = useState<"edit" | "delete" | null>(null);
   const packageId = data?.packageId;
-  const pckEmail = data?.email;
+
   const userId = data?.userId;
   const commentId = data?._id;
-  console.log(data);
 
   
 

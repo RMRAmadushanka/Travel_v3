@@ -5,7 +5,7 @@ import React, { ReactNode } from "react";
 import MobileFooterSticky from "../../components/MobileFooterSticky";
 import { imageGallery as listingCarImageGallery } from "./listing-car-detail/constant";
 import { Route } from "next";
-
+import { ToastContainer } from "react-toastify";
 const DetailtLayout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const thisPathname = usePathname();
@@ -30,7 +30,7 @@ const DetailtLayout = ({ children }: { children: ReactNode }) => {
 
       <div className="container ListingDetailPage__content">{children}</div>
 
-    
+      <ToastContainer/>
 
 
     </div>

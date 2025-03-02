@@ -141,7 +141,7 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
   };
 
   const sendEmail = (userDetails) => {
-    console.log(startDate);
+
     
     const templateParams = {
       car_name: carData?.vehicleName,
@@ -306,7 +306,6 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
     }
   };
 
-console.log(carData);
 
   const renderSection6 = () => {
 
@@ -444,8 +443,7 @@ console.log(carData);
             dates: { startDate, endDate },
             perDayPrice: carData.perDayRent,
           };
-    
-          console.log(carData.perDayRent);
+
           
     
     
@@ -472,12 +470,8 @@ console.log(carData);
             const [emailResult, apiResult] = await Promise.all([sendEmailPromise, apiCallPromise]);
     
             if (apiResult.success) {
-              Swal.fire({
-                icon: 'success',
-                title: 'Reservation Successful',
-                text: `Your car reservation ${carData?.carName} has been successfully completed.`,
-              });
-    
+         
+              toast.success(`Your car reservation ${carData?.carName} has been successfully completed.`);
               // Reset the form after a successful reservation
               resetForm();
               setShouldResetDateRange(true)
@@ -489,11 +483,8 @@ console.log(carData);
               throw new Error('Error saving package or sending email');
             }
           } catch (error) {
-            Swal.fire({
-              icon: 'error',
-              title: 'Reservation Failed',
-              text: 'There was an issue with your reservation. Please try again.',
-            });
+ 
+            toast.error("There was an issue with your reservation. Please try again.");
           }finally {
             setIsLoading(false); // Stop loading after request completes
           }

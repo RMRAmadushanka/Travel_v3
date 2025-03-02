@@ -35,7 +35,6 @@ const TabFilters = ({ priceRange, onApply, onClear, availablePackages }: TabFilt
   };
 
 
-console.log(rangePrices);
 
 
   const renderXClear = () => {
