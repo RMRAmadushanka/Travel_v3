@@ -77,32 +77,33 @@ const GuestsInput: FC<GuestsInputProps> = ({
       {({ open }) => (
         <>
           <div className={`flex-1 z-10 flex items-center focus:outline-none ${open ? "nc-hero-field-focused" : ""}`}>
-            <Popover.Button
-              className={`relative z-10 flex-1 flex text-left items-center ${fieldClassName} space-x-3 focus:outline-none`}
-            >
-              <div className="text-neutral-300 dark:text-neutral-400">
-                <UserPlusIcon className="w-5 h-5 lg:w-7 lg:h-7" />
-              </div>
-              <div className="flex-grow">
-                <span className="block xl:text-lg font-semibold">
-                  {totalGuests || ""} Guests
-                </span>
-                <span className="block mt-1 text-sm text-neutral-400 leading-none font-light">
-                  {totalGuests ? "Guests" : "Add guests"}
-                </span>
-              </div>
+          <Popover.Button
+  className={`relative z-10 flex-1 flex text-left items-center ${fieldClassName} space-x-3 focus:outline-none sm:space-x-3 ml-auto`}
+>
+  <div className="text-neutral-300 dark:text-neutral-400">
+    <UserPlusIcon className="w-5 h-5 lg:w-7 lg:h-7" />
+  </div>
+  <div className="flex-grow">
+    <span className="block xl:text-lg font-semibold">
+      {totalGuests || ""} Guests
+    </span>
+    <span className="block mt-1 text-sm text-neutral-400 leading-none font-light">
+      {totalGuests ? "Guests" : "Add guests"}
+    </span>
+  </div>
 
-              {!!totalGuests && open && (
-                <ClearDataButton
-                  onClick={() => {
-                    setGuestAdultsInputValue(0);
-                    setGuestChildrenInputValue(0);
-                    setGuestInfantsInputValue(0);
-                    if (onTotalGuestsChange) onTotalGuestsChange(0);
-                  }}
-                />
-              )}
-            </Popover.Button>
+  {!!totalGuests && open && (
+    <ClearDataButton
+      onClick={() => {
+        setGuestAdultsInputValue(0);
+        setGuestChildrenInputValue(0);
+        setGuestInfantsInputValue(0);
+        if (onTotalGuestsChange) onTotalGuestsChange(0);
+      }}
+    />
+  )}
+</Popover.Button>
+
           </div>
 
           {open && (

@@ -523,7 +523,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
         {({ setFieldValue, values, errors, touched }) => (
           <Form className="listingSectionSidebar__wrap shadow-xl">
             {/* PRICE */}
-            <div className="flex justify-between">
+            <div className="flex justify-between p-2">
               <span className="text-3xl font-semibold">
                 {packageData?.price} LKR
                 <span className="ml-1 text-base font-normal text-neutral-500 dark:text-neutral-400">
@@ -536,7 +536,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
             </div>
 
             {/* FORM */}
-            <div className="flex flex-col border border-neutral-200 dark:border-neutral-700 rounded-3xl">
+            <div className="flex flex-col border border-neutral-200 dark:border-neutral-700 rounded-3xl p-2">
               <div className="flex flex-col mx-4 mt-3 mb-3">
                 <label className="block w-full bg-transparent border-none focus:ring-0 p-0 focus:outline-none focus:placeholder-neutral-300 xl:text-lg font-semibold placeholder-neutral-800 dark:placeholder-neutral-200 truncate my-3">
                   Enter Pickup Location
@@ -652,7 +652,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
             </div>
 
             {/* SUM */}
-            <div className="flex flex-col space-y-4">
+            <div className="flex flex-col space-y-4 p-2">
               <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
                 <span>
                   {packageData?.price} LKR x {packageData?.duration} night x {totalGuests} guest

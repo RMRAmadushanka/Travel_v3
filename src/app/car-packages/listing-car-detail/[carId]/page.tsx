@@ -100,7 +100,39 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
       }
     }, [carData?.carId]);
 
-  if (loading) return <div>Loading...</div>;
+
+    const ShimmerLoader = () => {
+      return (
+        <div className="animate-pulse container ListingDetailPage__content">
+          {/* Header Loader */}
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+            <div className="col-span-2 row-span-3 sm:row-span-2 bg-neutral-200 dark:bg-neutral-800 h-60 rounded-md"></div>
+            <div className="bg-neutral-200 dark:bg-neutral-800 h-40 rounded-md"></div>
+            <div className="bg-neutral-200 dark:bg-neutral-800 h-40 rounded-md"></div>
+            <div className="hidden sm:block bg-neutral-200 dark:bg-neutral-800 h-40 rounded-md"></div>
+            <div className="hidden sm:block bg-neutral-200 dark:bg-neutral-800 h-40 rounded-md"></div>
+          </div>
+  
+          {/* Section Loader */}
+          <div className="space-y-6">
+            <div className="h-6 bg-neutral-200 dark:bg-neutral-800 w-1/2 rounded-md"></div>
+            <div className="space-y-3">
+              <div className="h-4 bg-neutral-200 dark:bg-neutral-800 w-3/4 rounded-md"></div>
+              <div className="h-4 bg-neutral-200 dark:bg-neutral-800 w-5/6 rounded-md"></div>
+              <div className="h-4 bg-neutral-200 dark:bg-neutral-800 w-2/3 rounded-md"></div>
+            </div>
+          </div>
+  
+          {/* Sidebar Loader */}
+          <div className="hidden lg:block space-y-4">
+            <div className="h-8 bg-neutral-200 dark:bg-neutral-800 w-1/3 rounded-md"></div>
+            <div className="h-6 bg-neutral-200 dark:bg-neutral-800 w-full rounded-md"></div>
+            <div className="h-6 bg-neutral-200 dark:bg-neutral-800 w-2/3 rounded-md"></div>
+          </div>
+        </div>
+      );
+    };
+  if (loading) return <ShimmerLoader />
   if (!carData) return <div>Car not found</div>;
 
 
@@ -392,6 +424,12 @@ console.log(carData);
   });
 
 
+
+  
+
+
+
+
   const renderSidebarDetail = () => {
 
 
@@ -484,7 +522,7 @@ console.log(carData);
         {({ setFieldValue, values }) => (
           <Form className="listingSectionSidebar__wrap shadow-xl">
             {/* PRICE */}
-            <div className="flex justify-between">
+            <div className="flex justify-between p-2">
               <span className="text-3xl font-semibold">
                 LKR {carData?.perDayRent}
                 <span className="ml-1 text-base font-normal text-neutral-500 dark:text-neutral-400">
@@ -539,7 +577,7 @@ console.log(carData);
             </div>
 
             {/* SUM */}
-            <div className="flex flex-col space-y-4">
+            <div className="flex flex-col space-y-4 p-2">
               <div className="flex justify-between text-neutral-600 dark:text-neutral-300">
                 <span>
                   {carData?.perDayRent} LKR / day x {values.days} days
