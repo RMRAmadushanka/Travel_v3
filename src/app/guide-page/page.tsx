@@ -57,7 +57,7 @@ function PageHome() {
           </div>
           <div className="relative h-80">
             <Image
-              src={CarBookingGuid}
+              src={CustomPckgGuid}
               alt="Creating a Custom Travel Package"
               layout="fill"
               objectFit="cover"
@@ -84,7 +84,7 @@ function PageHome() {
           </div>
           <div className="relative h-80">
             <Image
-              src={CustomPckgGuid}
+              src={CarBookingGuid}
               alt="Renting a Car"
               layout="fill"
               objectFit="cover"
