@@ -23,7 +23,7 @@ const SectionHero3: FC<SectionHero3Props> = ({ className = "" }) => {
         <ButtonPrimary
           sizeClass="px-6 py-3 lg:px-8 lg:py-4 rounded-xl"
           fontSize="text-sm sm:text-base lg:text-lg font-medium"
-          href="/travel-packages"
+          href="/guide-page"
         >
           Explore Our Booking Guide
         </ButtonPrimary>

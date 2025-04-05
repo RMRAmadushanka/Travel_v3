@@ -47,7 +47,7 @@ const Header3: FC<Header3Props> = ({ className = "" }) => {
 
           <span className="h-5 w-[1px] bg-neutral-300 dark:bg-neutral-700 mr-2"></span>
           <Link
-            href="/customize-package"
+            href="/guide-page"
             className="block px-2 cursor-pointer font-normal py-2 rounded-full bg-blue-600 mr-2 text-white"
           >
             New Here? Learn How!</Link>
