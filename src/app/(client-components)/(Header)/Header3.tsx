@@ -33,7 +33,7 @@ const Header3: FC<Header3Props> = ({ className = "" }) => {
             href="/car-packages"
             className="block px-4 cursor-pointer py-3 "
           >
-            Rent a Car
+            Rent a car
           </Link>
 
           <span className="h-5 w-[1px] bg-neutral-300 dark:bg-neutral-700"></span>
