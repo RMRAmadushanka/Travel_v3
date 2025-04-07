@@ -6,7 +6,7 @@ import "@/fonts/line-awesome-1.3.0/css/line-awesome.css";
 import "@/styles/index.scss";
 import "rc-slider/assets/index.css";
 import Footer from "@/components/Footer";
-
+import { FloatingWhatsApp } from 'react-floating-whatsapp'
 const poppins = Poppins({
   subsets: ["latin"],
   display: "swap",
@@ -27,6 +27,7 @@ export default function RootLayout({
         <SiteHeader />
 
         {children}
+        <FloatingWhatsApp phoneNumber="+94766694545" accountName="Ceylon Travels Guid "/>
         <Footer />
       </body>
     </html>
