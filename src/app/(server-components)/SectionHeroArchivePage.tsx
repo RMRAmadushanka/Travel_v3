@@ -42,8 +42,10 @@ const SectionHeroArchivePage: FC<SectionHeroArchivePageProps> = ({
         </div>
       </div>
 
-      <div className="hidden lg:block z-10 mb-12 lg:mb-0 lg:-mt-40 w-full">
-        <HeroSearchForm />
+      <div className="lg:block z-10 mb-12 lg:mb-0 lg:-mt-40 w-full">
+        <div className="lg:relative absolute bottom-0 left-0 w-full">
+          <HeroSearchForm />
+        </div>
       </div>
 
 
