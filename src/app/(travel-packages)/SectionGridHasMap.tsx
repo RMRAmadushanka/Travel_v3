@@ -88,7 +88,9 @@ const SectionGridHasMap: FC = () => {
 
   return (
     <div className="container pt-10 pb-24 lg:pt-16 lg:pb-28">
-      <Heading2 className="!mb-8" />
+      <div className={`mb-12 lg:mb-16 !mb-8`}>
+      <h2 className="text-4xl font-semibold">Search Results</h2>
+    </div>
       <div className="mb-8 lg:mb-11">
         {priceRange && (
           <TabFilters
