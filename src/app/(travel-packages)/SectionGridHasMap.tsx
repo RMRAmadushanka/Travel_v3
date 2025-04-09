@@ -76,8 +76,8 @@ const SectionGridHasMap: FC = () => {
 
       const matchesLocation = locationName
         ? item.locations.some(
-            (location) => location.locationName.toLowerCase() === locationName
-          )
+          (location) => location.locationName.toLowerCase() === locationName
+        )
         : true; // Include all if no location filter
 
       return isWithinPriceRange && matchesLocation;
@@ -89,8 +89,8 @@ const SectionGridHasMap: FC = () => {
   return (
     <div className="container pt-10 pb-24 lg:pt-16 lg:pb-28">
       <div className={`mb-12 lg:mb-16 !mb-8`}>
-      <h2 className="text-4xl font-semibold">Search Results</h2>
-    </div>
+        <h2 className="text-4xl font-semibold">Search Results</h2>
+      </div>
       <div className="mb-8 lg:mb-11">
         {priceRange && (
           <TabFilters
@@ -107,7 +107,7 @@ const SectionGridHasMap: FC = () => {
         )}
       </div>
       <div>
-      {filteredData.length > 0 ? (
+        {filteredData.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredData.map((stay) => (
               <StayCard2 key={stay.id} data={stay} />
@@ -115,8 +115,8 @@ const SectionGridHasMap: FC = () => {
           </div>
         ) : (
           <div className={`mb-12 lg:mb-16`}>
-          <h2 className="text-2xl text-gray-600 font-semibold text-center">No packages found for the selected price range.</h2>
-         </div>
+            <h2 className="text-2xl text-gray-600 font-semibold text-center">No packages found for the selected price range.</h2>
+          </div>
         )}
       </div>
     </div>
