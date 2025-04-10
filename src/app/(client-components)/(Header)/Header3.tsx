@@ -39,7 +39,7 @@ const Header3: FC<Header3Props> = ({ className = "" }) => {
           <span className="h-5 w-[1px] bg-neutral-300 dark:bg-neutral-700"></span>
 
           <Link
-            href="/customize-package"
+            href="/add-listing"
             className="block px-4 cursor-pointer font-normal py-3 "
           >
             Customize Package
