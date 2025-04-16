@@ -3,7 +3,7 @@ import Input from "@/shared/Input";
 import Select from "@/shared/Select";
 import FormItem from "../FormItem";
 
-export interface PageAddListing1Props {}
+export interface PageAddListing1Props { }
 
 const PageAddListing1: FC<PageAddListing1Props> = () => {
   return (
