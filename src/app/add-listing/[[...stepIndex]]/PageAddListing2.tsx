@@ -1,13 +1,7 @@
 "use client";
 
-import { MapPinIcon } from "@heroicons/react/24/solid";
-import LocationMarker from "@/components/AnyReactComponent/LocationMarker";
-import Label from "@/components/Label";
-import GoogleMapReact from "google-map-react";
 import React, { FC, useState } from "react";
-import ButtonSecondary from "@/shared/ButtonSecondary";
 import Input from "@/shared/Input";
-import Select from "@/shared/Select";
 import FormItem from "../FormItem";
 import DatePicker from "react-datepicker";
 import DatePickerCustomHeaderTwoMonth from "@/components/DatePickerCustomHeaderTwoMonth";
