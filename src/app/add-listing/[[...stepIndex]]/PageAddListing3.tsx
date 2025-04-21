@@ -4,7 +4,7 @@ import Select from "@/shared/Select";
 import FormItem from "../FormItem";
 import Input from "@/shared/Input";
 
-export interface PageAddListing3Props {}
+export interface PageAddListing3Props { }
 
 const PageAddListing3: FC<PageAddListing3Props> = () => {
   return (
@@ -18,12 +18,12 @@ const PageAddListing3: FC<PageAddListing3Props> = () => {
           <Input />
         </FormItem>
         <div>
-  <h2 className="text-2xl font-semibold">Group Details</h2>
-  <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
-  Please provide details about your group for the travel package.
-  </span>
-</div>
-      
+          <h2 className="text-2xl font-semibold">Group Details</h2>
+          <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
+            Please provide details about your group for the travel package.
+          </span>
+        </div>
+
         <NcInputNumber label="Adults" defaultValue={4} />
         <NcInputNumber label="Children" defaultValue={4} />
         <NcInputNumber label="Infants" defaultValue={2} />

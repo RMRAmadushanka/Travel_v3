@@ -3,7 +3,7 @@ import Checkbox from "@/shared/Checkbox";
 import ButtonPrimary from "@/shared/ButtonPrimary";
 import Input from "@/shared/Input";
 
-export interface PageAddListing4Props {}
+export interface PageAddListing4Props { }
 
 const PageAddListing4: FC<PageAddListing4Props> = () => {
   const renderNoInclude = (text: string) => {
@@ -24,7 +24,7 @@ const PageAddListing4: FC<PageAddListing4Props> = () => {
           Mention the places you wish to travel to. This will help us customize your travel package.
         </span>
       </div>
-    
+
       {/* FORM */}
       <div className="space-y-8">
         {/* ITEM */}
