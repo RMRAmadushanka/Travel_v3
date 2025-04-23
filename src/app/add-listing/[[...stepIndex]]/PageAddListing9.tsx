@@ -6,7 +6,7 @@ import NcInputNumber from "@/components/NcInputNumber";
 import React, { FC, useState } from "react";
 import DatePicker from "react-datepicker";
 
-export interface PageAddListing9Props {}
+export interface PageAddListing9Props { }
 
 const PageAddListing9: FC<PageAddListing9Props> = () => {
   const [dates, setDates] = useState<number[]>([

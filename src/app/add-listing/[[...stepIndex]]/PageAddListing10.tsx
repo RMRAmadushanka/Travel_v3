@@ -6,7 +6,7 @@ import ButtonSecondary from "@/shared/ButtonSecondary";
 import { EyeIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { Route } from "@/routers/types";
 
-export interface PageAddListing10Props {}
+export interface PageAddListing10Props { }
 
 const PageAddListing10: FC<PageAddListing10Props> = () => {
   return (
