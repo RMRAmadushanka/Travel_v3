@@ -5,9 +5,9 @@ import {schemaTypes} from './schemaTypes'
 
 export default defineConfig({
   name: 'default',
-  title: 'Travel',
+  title: 'Ceylon Travels Guide',
 
-  projectId: '6rg9fxn1',
+  projectId: 'ohstzxgz',
   dataset: 'production',
 
   plugins: [structureTool(), visionTool()],

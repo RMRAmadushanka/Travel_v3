@@ -26,6 +26,9 @@ import MobileFooterSticky from "@/components/MobileFooterSticky";
 import Textarea from "@/shared/Textarea";
 import { toast, ToastContainer } from "react-toastify";
 import Button from "@/shared/Button";
+import DayAccordion from "../../DayAccordion";
+import RouteMap from "@/components/RouteMap";
+import MapWrapper from "@/components/MapWrapper";
 export interface ListingStayDetailPageProps { }
 
 const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
@@ -66,28 +69,46 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
             description,
             duration,
             price,
-            locations[]{
+            locations[] {
               locationId,
               locationName,
-              map { lat, lng }
+              map { lat, lng },
+              day,
+              title,
+              description,
+              mainImage { asset->{url} },
+              activities,
+              highlights[] {
+                title,
+                image { asset->{url} }
+              },
+              accommodation,
+              mealPlan,
+              travelTime,
+              transportMode
             },
-            feedback[]{
+            feedback[] {
               rating,
               userName,
-              comment
+              comment,
+              packageId,
+              userId,
+              email
             },
             registerDate,
             saleOff,
             guestCount,
-            vehicles[]{
+            vehicles[] {
               vehicleId,
               vehicleName,
               vehicleType
             },
-            images[]{ asset->{url} }
+            images[] {
+              asset->{url}
+            }
           }`,
-          { id: Id } // Replace with actual package ID
-        );
+          { id: Id }
+        );        
         setPackageData(data);
       } catch (error) {
         console.error("Error fetching package data:", error);
@@ -130,6 +151,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
       });
   };
 
+console.log(packageData?.id);
 
 
   const ShimmerLoader = () => {
@@ -193,32 +215,31 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 
   const renderSection4 = () => {
     return (
-      <div className="listingSection__wrap">
-        {/* HEADING */}
-        <div>
-          <h2 className="text-2xl font-semibold">Package Locations with dates</h2>
-          <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
-            Prices may increase on weekends or holidays
-          </span>
-        </div>
-        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
-        {/* CONTENT */}
-        <div className="flow-root">
-          <div className="text-sm sm:text-base text-neutral-6000 dark:text-neutral-300 -mb-4">
-            {packageData?.locations.map((location, index) => (
-              <div
-                key={index}
-                className={`p-4 flex justify-between items-center space-x-4 rounded-lg ${index % 2 === 0 ? "bg-neutral-100 dark:bg-neutral-800" : ""
-                  }`}
-              >
-                <span>{`Day ${index + 1}`}</span>
-                <span>{location.locationName}</span>
-              </div>
-            ))}
+      <div >
+{packageData?.locations?.map((location, index) => (
+  <DayAccordion
+    key={location.locationId || index}
+    day={location.day}
+    title={location.title}
+    description={location.description}
+    activities={location.activities || []}
+    highlights={
+      (location.highlights || []).map((highlight) => ({
+        title: highlight.title,
+        imageUrl: highlight.image?.asset?.url || '',
+      }))
+    }
+    accommodation={location.accommodation}
+    mealPlan={location.mealPlan}
+    travelTime={location.travelTime}
+    transportMode={location.transportMode}
+    imageUrl={location.mainImage?.asset?.url || ''}
+  />
+))}
+     
 
-          </div>
-        </div>
-      </div>
+      {/* Add another DayAccordion for Day 2, Day 3, etc */}
+    </div>
     );
   };
 
@@ -739,8 +760,10 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
         <div className="w-full lg:w-3/5 xl:w-2/3 space-y-8 lg:pr-10 lg:space-y-10">
           {renderSection2()}
           {renderSection4()}
+          <MapWrapper packageId={packageData?.id}/>
           {renderSection8()}
           {renderSection6()}
+
         </div>
         {/* SIDEBAR */}
         <div className=" lg:block flex-grow mt-14 lg:mt-0 min-h-screen">

@@ -4,7 +4,7 @@ import logoLightImg from "@/images/logo-light.png";
 import LogoSvgLight from "./LogoSvgLight";
 import LogoSvg from "./LogoSvg";
 import Link from "next/link";
-import { StaticImageData } from "next/image";
+import Image, { StaticImageData } from "next/image";
 
 export interface LogoProps {
   img?: StaticImageData;
@@ -22,17 +22,12 @@ const Logo: React.FC<LogoProps> = ({
       href="/"
       className={`ttnc-logo inline-block text-primary-6000 focus:outline-none focus:ring-0 ${className}`}
     >
-      <LogoSvgLight />
-      <LogoSvg />
+<Image className="block w-32 h-auto" src={logoImg} alt="Logo" />
 
       {/* THIS USE FOR MY CLIENT */}
       {/* PLEASE UN COMMENT BELLOW CODE AND USE IT */}
       {/* {img ? (
-        <img
-          className={`block max-h-12 ${imgLight ? "dark:hidden" : ""}`}
-          src={img}
-          alt="Logo"
-        />
+    
       ) : (
         "Logo Here"
       )}

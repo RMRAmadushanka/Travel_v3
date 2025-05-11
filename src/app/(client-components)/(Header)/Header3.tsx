@@ -5,7 +5,8 @@ import Logo from "@/shared/Logo";
 import MenuBar from "@/shared/MenuBar";
 import Link from "next/link";
 import SwitchDarkMode from "@/shared/SwitchDarkMode";
-
+import logoImg from "@/images/logo.png";
+import Image from "next/image";
 interface Header3Props {
   className?: string;
 }
@@ -48,7 +49,8 @@ const Header3: FC<Header3Props> = ({ className = "" }) => {
           <span className="h-5 w-[1px] bg-neutral-300 dark:bg-neutral-700 mr-2"></span>
           <Link
             href="/guide-page"
-            className="block px-2 cursor-pointer font-normal py-2 rounded-full bg-blue-600 mr-2 text-white"
+            className="block px-2 cursor-pointer font-normal py-2 mr-2 rounded-full  text-white bg-primary-600"
+      
           >
             New Here? Learn How!</Link>
 
@@ -73,9 +75,9 @@ const Header3: FC<Header3Props> = ({ className = "" }) => {
         ></div>
         <div className="relative px-4 lg:container h-[88px] flex">
           <div className="flex-1 flex justify-between">
-            {/* Logo (lg+) */}
+       
             <div className="flex flex-1 items-center space-x-4 sm:space-x-10">
-              <Logo />
+           <Image className="block w-32 h-auto" src={logoImg} alt="Logo" />
             </div>
             <div className="flex flex-[2] lg:flex-none mx-auto ">
               <div className="flex-1 lg:flex hidden self-center">

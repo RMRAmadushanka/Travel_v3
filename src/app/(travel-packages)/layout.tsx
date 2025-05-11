@@ -7,7 +7,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     <div>
        <ToastContainer/>
       {children}
-  
+      
     </div>
   );
 };

@@ -22,19 +22,19 @@ const DEMO_DATA: SectionHowItWorkProps["data"] = [
     id: 1,
     img: HIW1img,
     title: "Book & relax",
-    desc: "Let each trip be an inspirational journey, each room a peaceful space",
+    desc: "Fill out the form for a package, custom trip, or vehicle rental.",
   },
   {
     id: 2,
     img: HIW2img,
     title: "Smart checklist",
-    desc: "Let each trip be an inspirational journey, each room a peaceful space",
+    desc: "Our agent will call or message you to confirm everything.",
   },
   {
     id: 3,
     img: HIW3img,
     title: "Save more",
-    desc: "Let each trip be an inspirational journey, each room a peaceful space",
+    desc: "Pay securely to lock in your booking!",
   },
 ];
 
@@ -44,7 +44,7 @@ const SectionHowItWork: FC<SectionHowItWorkProps> = ({
 }) => {
   return (
     <div
-      className={`nc-SectionHowItWork  ${className}`}
+      className={`nc-SectionHowItWork px-10 py-14 ${className}`}
       data-nc-id="SectionHowItWork"
     >
       <Heading isCenter desc="Keep calm & travel on">

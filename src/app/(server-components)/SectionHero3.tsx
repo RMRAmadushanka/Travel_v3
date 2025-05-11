@@ -25,17 +25,18 @@ const SectionHero3: FC<SectionHero3Props> = ({ className = "" }) => {
           fontSize="text-sm sm:text-base lg:text-lg font-medium"
           href="/guide-page"
         >
-          Explore Our Booking Guide
+          Keep calm & travel on
         </ButtonPrimary>
       </div>
-      <div className="relative aspect-w-1 aspect-h-1 sm:aspect-w-4 sm:aspect-h-3 lg:aspect-w-16 lg:aspect-h-9 xl:aspect-h-8 ">
-        <Image
-          className="absolute inset-0 object-cover rounded-xl"
-          src={imagePng}
-          alt="hero"
-          priority
-        />
-      </div>
+      <div className="relative aspect-w-1 aspect-h-1 sm:aspect-w-4 sm:aspect-h-3 lg:aspect-w-16 lg:aspect-h-9 xl:aspect-h-6">
+  <Image
+    className="absolute inset-0 object-cover rounded-xl"
+    src={imagePng}
+    alt="hero"
+    priority
+  />
+</div>
+
       
     </div>
   );
