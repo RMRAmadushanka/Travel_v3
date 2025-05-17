@@ -1,26 +1,21 @@
 "use client";
-
-import React, { FC, Fragment, useEffect, useState } from "react";
-import { ArrowRightIcon, Squares2X2Icon } from "@heroicons/react/24/outline";
+import React, { FC, useEffect, useState } from "react";
 import CommentListing from "@/components/CarCommentListing";
 import FiveStartIconForRate from "@/components/FiveStartIconForRate";
 import StartRating from "@/components/StartRating";
 import Badge from "@/shared/Badge";
-import ButtonCircle from "@/shared/ButtonCircle";
 import ButtonPrimary from "@/shared/ButtonPrimary";
 import ButtonSecondary from "@/shared/ButtonSecondary";
-import Input from "@/shared/Input";
 import Image from "next/image";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import RentalCarDatesRangeInput from "../RentalCarDatesRangeInput";
 import { Route } from "next";
 import { client } from "@/utils/client";
 import emailjs from '@emailjs/browser';
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 export interface ListingCarDetailPageProps { }
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import Swal from "sweetalert2";
 import axios from "axios";
 import Button from "@/shared/Button";
 const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
@@ -28,18 +23,18 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
   const [loading, setLoading] = useState(true);
   const { carId } = useParams();
   const [totalDays, setTotalDays] = useState<number>(0);
-  const [shouldResetDateRange, setShouldResetDateRange] = useState(false);
+  const [setShouldResetDateRange] = useState(false);
   const [resetDates, setResetDates] = useState<() => void>(() => () => { });
   const [startDate, setStartDate] = useState<string | null>(null);
   const [endDate, setEndDate] = useState<string | null>(null);
-  const [email, setEmail] = useState<string | null>(null);
+  const [setEmail] = useState<string | null>(null);
   const [totalPrice, setTotalPrice] = useState(0);
 
 
-    const [feedbacks, setFeedbacks] = useState(carData?.feedback || []);
-    const [visibleFeedbacks, setVisibleFeedbacks] = useState(5);
-    const [selectedRating, setSelectedRating] = useState(5);
-    const [isLoading, setIsLoading] = useState(false);
+  const [feedbacks, setFeedbacks] = useState(carData?.feedback || []);
+  const [visibleFeedbacks, setVisibleFeedbacks] = useState(5);
+  const [selectedRating, setSelectedRating] = useState(5);
+  const [isLoading, setIsLoading] = useState(false);
 
 
   const thisPathname = usePathname();
@@ -94,44 +89,44 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
     }
   }, [carId]);
 
-    useEffect(() => {
-      if (carData?.carId) {
-        fetchUpdatedFeedbacks();
-      }
-    }, [carData?.carId]);
+  useEffect(() => {
+    if (carData?.carId) {
+      fetchUpdatedFeedbacks();
+    }
+  }, [carData?.carId]);
 
 
-    const ShimmerLoader = () => {
-      return (
-        <div className="animate-pulse container ListingDetailPage__content">
-          {/* Header Loader */}
-          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-            <div className="col-span-2 row-span-3 sm:row-span-2 bg-neutral-200 dark:bg-neutral-800 h-60 rounded-md"></div>
-            <div className="bg-neutral-200 dark:bg-neutral-800 h-40 rounded-md"></div>
-            <div className="bg-neutral-200 dark:bg-neutral-800 h-40 rounded-md"></div>
-            <div className="hidden sm:block bg-neutral-200 dark:bg-neutral-800 h-40 rounded-md"></div>
-            <div className="hidden sm:block bg-neutral-200 dark:bg-neutral-800 h-40 rounded-md"></div>
-          </div>
-  
-          {/* Section Loader */}
-          <div className="space-y-6">
-            <div className="h-6 bg-neutral-200 dark:bg-neutral-800 w-1/2 rounded-md"></div>
-            <div className="space-y-3">
-              <div className="h-4 bg-neutral-200 dark:bg-neutral-800 w-3/4 rounded-md"></div>
-              <div className="h-4 bg-neutral-200 dark:bg-neutral-800 w-5/6 rounded-md"></div>
-              <div className="h-4 bg-neutral-200 dark:bg-neutral-800 w-2/3 rounded-md"></div>
-            </div>
-          </div>
-  
-          {/* Sidebar Loader */}
-          <div className="hidden lg:block space-y-4">
-            <div className="h-8 bg-neutral-200 dark:bg-neutral-800 w-1/3 rounded-md"></div>
-            <div className="h-6 bg-neutral-200 dark:bg-neutral-800 w-full rounded-md"></div>
-            <div className="h-6 bg-neutral-200 dark:bg-neutral-800 w-2/3 rounded-md"></div>
+  const ShimmerLoader = () => {
+    return (
+      <div className="animate-pulse container ListingDetailPage__content">
+        {/* Header Loader */}
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+          <div className="col-span-2 row-span-3 sm:row-span-2 bg-neutral-200 dark:bg-neutral-800 h-60 rounded-md"></div>
+          <div className="bg-neutral-200 dark:bg-neutral-800 h-40 rounded-md"></div>
+          <div className="bg-neutral-200 dark:bg-neutral-800 h-40 rounded-md"></div>
+          <div className="hidden sm:block bg-neutral-200 dark:bg-neutral-800 h-40 rounded-md"></div>
+          <div className="hidden sm:block bg-neutral-200 dark:bg-neutral-800 h-40 rounded-md"></div>
+        </div>
+
+        {/* Section Loader */}
+        <div className="space-y-6">
+          <div className="h-6 bg-neutral-200 dark:bg-neutral-800 w-1/2 rounded-md"></div>
+          <div className="space-y-3">
+            <div className="h-4 bg-neutral-200 dark:bg-neutral-800 w-3/4 rounded-md"></div>
+            <div className="h-4 bg-neutral-200 dark:bg-neutral-800 w-5/6 rounded-md"></div>
+            <div className="h-4 bg-neutral-200 dark:bg-neutral-800 w-2/3 rounded-md"></div>
           </div>
         </div>
-      );
-    };
+
+        {/* Sidebar Loader */}
+        <div className="hidden lg:block space-y-4">
+          <div className="h-8 bg-neutral-200 dark:bg-neutral-800 w-1/3 rounded-md"></div>
+          <div className="h-6 bg-neutral-200 dark:bg-neutral-800 w-full rounded-md"></div>
+          <div className="h-6 bg-neutral-200 dark:bg-neutral-800 w-2/3 rounded-md"></div>
+        </div>
+      </div>
+    );
+  };
   if (loading) return <ShimmerLoader />
   if (!carData) return <div>Car not found</div>;
 
@@ -142,7 +137,7 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
 
   const sendEmail = (userDetails) => {
 
-    
+
     const templateParams = {
       car_name: carData?.vehicleName,
       user_email: userDetails.email,
@@ -163,13 +158,13 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
       });
   };
 
-  
+
   const renderSection1 = () => {
     const reviewStart =
-      carData?.feedback.length > 0
-        ? carData?.feedback.reduce((sum, item) => sum + item.rating, 0) / carData?.feedback.length
+      (carData?.feedback?.length ?? 0) > 0
+        ? carData!.feedback!.reduce((sum, item) => sum + item.rating, 0) / carData!.feedback!.length
         : 0;
-    const reviewCount = carData?.feedback.length;
+    const reviewCount = carData?.feedback?.length ?? 0;
 
     return (
       <div className="listingSection__wrap !space-y-6">
@@ -413,18 +408,18 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
     pickupLocation: Yup.string()
       .required("Pickup location is required")
       .min(3, "Minimum 3 characters required"),
-      days: Yup.number()
+    days: Yup.number()
       .required("Total days is required")
       .min(1, "Must be at least 1 day"),
     startDate: Yup.date().required("Start date is required"),
     endDate: Yup.date().required("End date is required"),
     email: Yup.string().email("Invalid email address").required("Email is required"),
-    
+
   });
 
 
 
-  
+
 
 
 
@@ -434,65 +429,65 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
 
     const handleReserve = async (values, { resetForm }) => {
       setIsLoading(true);
-          const userDetails = {
-            email: values.email,
-            carName: carData?.vehicleName || "Default Car Name",
-            pickupLocation: values.pickupLocation,
-            totalDays: values.days,    
-            totalPrice: totalPrice,
-            dates: { startDate, endDate },
-            perDayPrice: carData.perDayRent,
-          };
+      const userDetails = {
+        email: values.email,
+        carName: carData?.vehicleName || "Default Car Name",
+        pickupLocation: values.pickupLocation,
+        totalDays: values.days,
+        totalPrice: totalPrice,
+        dates: { startDate, endDate },
+        perDayPrice: carData.perDayRent,
+      };
 
-          
-    
-    
+
+
+
+      try {
+        // Create promises for both functions
+        const sendEmailPromise = new Promise((resolve, reject) => {
           try {
-            // Create promises for both functions
-            const sendEmailPromise = new Promise((resolve, reject) => {
-              try {
-                sendEmail(userDetails);
-                resolve('Email sent successfully');
-              } catch (error) {
-                reject('Error sending email');
-              }
-            });
-    
-            const apiCallPromise = fetch('/api/car-reservation', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(userDetails),
-            }).then((response) => response.json());
-    
-            // Use Promise.all to execute both promises concurrently
-            const [emailResult, apiResult] = await Promise.all([sendEmailPromise, apiCallPromise]);
-    
-            if (apiResult.success) {
-         
-              toast.success(`Your car reservation ${carData?.carName} has been successfully completed.`);
-              // Reset the form after a successful reservation
-              resetForm();
-              setShouldResetDateRange(true)
-              setResetDates(() => () => { });  
-              setStartDate(null); // Reset startDate state
-              setEndDate(null); // Reset endDate state
-            
-            } else {
-              throw new Error('Error saving package or sending email');
-            }
+            sendEmail(userDetails);
+            resolve('Email sent successfully');
           } catch (error) {
- 
-            toast.error("There was an issue with your reservation. Please try again.");
-          }finally {
-            setIsLoading(false); // Stop loading after request completes
+            reject('Error sending email');
           }
-        };
+        });
 
-      
- 
-      
+        const apiCallPromise = fetch('/api/car-reservation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userDetails),
+        }).then((response) => response.json());
+
+        // Use Promise.all to execute both promises concurrently
+        const [emailResult, apiResult] = await Promise.all([sendEmailPromise, apiCallPromise]);
+
+        if (apiResult.success) {
+
+          toast.success(`Your car reservation ${carData?.carName} has been successfully completed.`);
+          // Reset the form after a successful reservation
+          resetForm();
+          setShouldResetDateRange(true)
+          setResetDates(() => () => { });
+          setStartDate(null); // Reset startDate state
+          setEndDate(null); // Reset endDate state
+
+        } else {
+          throw new Error('Error saving package or sending email');
+        }
+      } catch (error) {
+
+        toast.error("There was an issue with your reservation. Please try again.");
+      } finally {
+        setIsLoading(false); // Stop loading after request completes
+      }
+    };
+
+
+
+
 
     const calculateTotalPrice = () => {
       return carData.perDayRent * totalDays;
@@ -500,13 +495,13 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
 
     return (
       <Formik
-      initialValues={{
-        startDate: null,
-        endDate: null,
-        days: 0,
-        email:'',
-        pickupLocation:''
-      }}
+        initialValues={{
+          startDate: null,
+          endDate: null,
+          days: 0,
+          email: '',
+          pickupLocation: ''
+        }}
         validationSchema={validationSchema}
         onSubmit={handleReserve}
       >
@@ -539,30 +534,30 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
               <label className="block xl:text-lg font-semibold">Enter your Email</label>
 
               <Field
-                  type="email"
-                  name="email"
-                  placeholder="Enter your Email"
-                  className="w-full px-4 py-2 border border-neutral-200 dark:border-neutral-700 rounded-3xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-neutral-800 dark:text-neutral-200"
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setFieldValue('email', value);  // Update Formik state
-                    setEmail(value);  // Update your custom local state
-                  }}
-                />
-                <ErrorMessage name="pickupLocation" component="div" className="text-red-500 text-sm" />
+                type="email"
+                name="email"
+                placeholder="Enter your Email"
+                className="w-full px-4 py-2 border border-neutral-200 dark:border-neutral-700 rounded-3xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-neutral-800 dark:text-neutral-200"
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setFieldValue('email', value);  // Update Formik state
+                  setEmail(value);  // Update your custom local state
+                }}
+              />
+              <ErrorMessage name="pickupLocation" component="div" className="text-red-500 text-sm" />
 
 
 
               <div className="w-full border-b border-neutral-200 dark:border-neutral-700"></div>
-              <RentalCarDatesRangeInput reset={resetDates}  onDaysChange={async(days, startDate, endDate) => {
-              setFieldValue("startDate", startDate);
-              setFieldValue("endDate", endDate);
-              setFieldValue("days", days);
-              await setTotalDays(days)
-              await setStartDate(startDate)
-              await setEndDate(endDate)
-              await setTotalPrice(days * carData.perDayRent);
-            }}
+              <RentalCarDatesRangeInput reset={resetDates} onDaysChange={async (days, startDate, endDate) => {
+                setFieldValue("startDate", startDate);
+                setFieldValue("endDate", endDate);
+                setFieldValue("days", days);
+                await setTotalDays(days)
+                await setStartDate(startDate)
+                await setEndDate(endDate)
+                await setTotalPrice(days * carData.perDayRent);
+              }}
               />
               <ErrorMessage name="totalDays" component="div" className="text-red-500 text-sm" />
             </div>
@@ -584,7 +579,7 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
 
             {/* SUBMIT */}
             <Button className="bg-blue-600 text-gray-50" type="submit" loading={isLoading} disabled={isLoading}>Reserve</Button>
-  
+
           </Form>
         )}
       </Formik>
@@ -599,7 +594,6 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
           {/* Main Image (First Image) */}
           <div
             className="col-span-2 row-span-2 relative rounded-md sm:rounded-xl overflow-hidden cursor-pointer"
-            onClick={handleOpenModalImageGallery}
           >
             <Image
               fill
@@ -649,20 +643,8 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
               />
             </div>
           ))}
-
-          {/* Show All Photos Button */}
-          <div
-            className="absolute hidden md:flex md:items-center md:justify-center left-3 bottom-3 px-4 py-2 rounded-xl bg-neutral-100 text-neutral-500 cursor-pointer hover:bg-neutral-200 z-10"
-            onClick={handleOpenModalImageGallery}
-          >
-            <Squares2X2Icon className="h-5 w-5" />
-            <span className="ml-2 text-neutral-800 text-sm font-medium">
-              Show all photos
-            </span>
-          </div>
         </div>
       </header>
-
 
       {/* MAIn */}
       <main className=" relative z-10 mt-11 flex flex-col lg:flex-row ">

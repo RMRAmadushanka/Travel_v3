@@ -3,6 +3,13 @@ import { FC } from "react";
 import ButtonPrimary from "@/shared/ButtonPrimary";
 import ButtonSecondary from "@/shared/ButtonSecondary";
 import { Route } from "@/routers/types";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Create custom Sri Lanka tours",
+  description:
+    "Create custom Sri Lanka tours on Ceylon Travels Guide: select your dates, top destinations like Sigiriya Rock Fortress, Temple of the Tooth, Ella’s Nine Arch Bridge & more, plus vehicles & hotels for a seamless, personalized travel package.",
+};
 
 export interface CommonLayoutProps {
   children: React.ReactNode;

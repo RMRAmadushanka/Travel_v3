@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import SectionGridFilterCard from "../SectionGridFilterCard";
+import { Metadata } from "next";
 
 export interface ListingExperiencesPageProps {}
-
 const ListingExperiencesPage: FC<ListingExperiencesPageProps> = ({}) => {
   return (
     <div className="container relative">
