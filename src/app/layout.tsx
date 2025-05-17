@@ -8,7 +8,6 @@ import "@/styles/index.scss";
 import "rc-slider/assets/index.css";
 import Footer from "@/components/Footer";
 
-import ogimage from '../favicon.ico'
 import { description, title } from "@/lib/constants";
 import { Metadata } from "next";
 import WhatsApp from "./whatsApp/WhatsApp";
@@ -45,7 +44,7 @@ export const metadata: Metadata = {
     siteName: title,
     images: [
       {
-        url: "../images/opengraph-image.png",
+        url: "./opengraph-image.png",
         width: 1200,
         height: 630,
         alt: title,
@@ -57,10 +56,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title,
     description,
-    images: ["../images/opengraph-image.png"],
+    images: ["./opengraph-image.png"],
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "./favicon.ico",
   },
 };
 
