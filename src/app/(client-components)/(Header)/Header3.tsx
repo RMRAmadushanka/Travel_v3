@@ -76,8 +76,10 @@ const Header3: FC<Header3Props> = ({ className = "" }) => {
         <div className="relative px-4 lg:container h-[88px] flex">
           <div className="flex-1 flex justify-between">
        
-            <div className="flex flex-1 items-center space-x-4 sm:space-x-10">
-           <Image className="block w-32 h-auto" src={logoImg} alt="Logo" />
+            <div className="flex flex-1 items-center space-x-4 sm:space-x-10">    
+                  <Link href="/" >
+        <Image className="block w-32 h-auto" src={logoImg} alt="Logo" />
+    </Link>
             </div>
             <div className="flex flex-[2] lg:flex-none mx-auto ">
               <div className="flex-1 lg:flex hidden self-center">
