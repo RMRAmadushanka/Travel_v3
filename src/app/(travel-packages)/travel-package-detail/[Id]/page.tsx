@@ -197,8 +197,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
   const renderSection2 = () => {
     return (
       <div className="listingSection__wrap">
-        <h2 className="text-2xl font-semibold">Package Description</h2>
-        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+        <h4 className="text-lg font-semibold">Package Description</h4>
+        <div className="w-full border-b border-neutral-200 dark:border-neutral-700"></div>
         <div className="text-neutral-6000 dark:text-neutral-300">
           {/* Description */}
           <span>
@@ -385,7 +385,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
       <div className="listingSection__wrap">
         {/* HEADING */}
         <h2 className="text-2xl font-semibold">Things to know</h2>
-        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
+        <div className="w-full border-b border-neutral-200 dark:border-neutral-700" />
 
         {/* CONTENT */}
         <div>
@@ -752,6 +752,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
       <main className=" relative z-10 mt-11 flex flex-col lg:flex-row  ">
         {/* CONTENT */}
         <div className="w-full lg:w-3/5 xl:w-2/3 space-y-8 lg:pr-10 lg:space-y-10">
+               <h2 className="text-3xl font-semibold">{packageData?.packageName}</h2>
           {renderSection2()}
           {renderSection4()}
           <MapWrapper packageId={packageData?.id} />
