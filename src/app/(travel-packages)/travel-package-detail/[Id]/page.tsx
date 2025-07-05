@@ -108,7 +108,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
             }
           }`,
           { id: Id }
-        );        
+        );
         setPackageData(data);
       } catch (error) {
         console.error("Error fetching package data:", error);
@@ -151,7 +151,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
       });
   };
 
-console.log(packageData?.id);
+  console.log(packageData?.id);
 
 
   const ShimmerLoader = () => {
@@ -216,30 +216,30 @@ console.log(packageData?.id);
   const renderSection4 = () => {
     return (
       <div >
-{packageData?.locations?.map((location, index) => (
-  <DayAccordion
-    key={location.locationId || index}
-    day={location.day}
-    title={location.title}
-    description={location.description}
-    activities={location.activities || []}
-    highlights={
-      (location.highlights || []).map((highlight) => ({
-        title: highlight.title,
-        imageUrl: highlight.image?.asset?.url || '',
-      }))
-    }
-    accommodation={location.accommodation}
-    mealPlan={location.mealPlan}
-    travelTime={location.travelTime}
-    transportMode={location.transportMode}
-    imageUrl={location.mainImage?.asset?.url || ''}
-  />
-))}
-     
+        {packageData?.locations?.map((location, index) => (
+          <DayAccordion
+            key={location.locationId || index}
+            day={location.day}
+            title={location.title}
+            description={location.description}
+            activities={location.activities || []}
+            highlights={
+              (location.highlights || []).map((highlight) => ({
+                title: highlight.title,
+                imageUrl: highlight.image?.asset?.url || '',
+              }))
+            }
+            accommodation={location.accommodation}
+            mealPlan={location.mealPlan}
+            travelTime={location.travelTime}
+            transportMode={location.transportMode}
+            imageUrl={location.mainImage?.asset?.url || ''}
+          />
+        ))}
 
-      {/* Add another DayAccordion for Day 2, Day 3, etc */}
-    </div>
+
+        {/* Add another DayAccordion for Day 2, Day 3, etc */}
+      </div>
     );
   };
 
@@ -487,7 +487,7 @@ console.log(packageData?.id);
         const [emailResult, apiResult] = await Promise.all([sendEmailPromise, apiCallPromise]);
 
         if (apiResult.success) {
- 
+
           toast.success(`Your reservation for the ${packageData?.packageName} package has been successfully completed.`);
 
           // Reset the form after a successful reservation
@@ -706,52 +706,43 @@ console.log(packageData?.id);
       {/*  HEADER */}
       <header className="rounded-md sm:rounded-xl">
         <div className="relative grid grid-cols-3 sm:grid-cols-4 gap-1 sm:gap-2">
-          <div
-            className="col-span-2 row-span-3 sm:row-span-2 relative rounded-md sm:rounded-xl overflow-hidden cursor-pointer"
-            onClick={handleOpenModalImageGallery}
-          >
-            <Image
-              fill
-              className="object-cover rounded-md sm:rounded-xl"
-              src={PHOTOS[0]}
-              alt=""
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
-            />
-            <div className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0 hover:opacity-50 transition-opacity"></div>
-          </div>
-          {PHOTOS.filter((_, i) => i >= 1 && i < 5).map((item, index) => (
+          {/* Main Image from the first location */}
+          {packageData && packageData.locations[0].mainImage && (
             <div
-              key={index}
-              className={`relative rounded-md sm:rounded-xl overflow-hidden ${index >= 3 ? "hidden sm:block" : ""
-                }`}
+              className="col-span-2 row-span-3 sm:row-span-2 relative rounded-md sm:rounded-xl overflow-hidden"
+              onClick={handleOpenModalImageGallery}
             >
-              <div className="aspect-w-4 aspect-h-3 sm:aspect-w-6 sm:aspect-h-5">
-                <Image
-                  fill
-                  className="object-cover rounded-md sm:rounded-xl "
-                  src={item || ""}
-                  alt=""
-                  sizes="400px"
-                />
-              </div>
-
-              {/* OVERLAY */}
-              <div
-                className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0 hover:opacity-50 transition-opacity cursor-pointer"
-                onClick={handleOpenModalImageGallery}
+              <Image
+                fill
+                className="object-cover rounded-md sm:rounded-xl"
+                src={packageData.locations[0].mainImage.asset.url}
+                alt="Main Image"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
               />
+              <div className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0"></div>
             </div>
-          ))}
+          )}
 
-          <button
-            className="absolute hidden md:flex md:items-center md:justify-center left-3 bottom-3 px-4 py-2 rounded-xl bg-neutral-100 text-neutral-500 hover:bg-neutral-200 z-10"
-            onClick={handleOpenModalImageGallery}
-          >
-            <Squares2X2Icon className="w-5 h-5" />
-            <span className="ml-2 text-neutral-800 text-sm font-medium">
-              Show all photos
-            </span>
-          </button>
+          {/* Highlight Images from the first two locations */}
+          {packageData &&
+            packageData.locations.slice(0, 2).map((location, locationIndex) =>
+              location.highlights.slice(0, 2).map((highlight, highlightIndex) => (
+                <div
+                  key={`${locationIndex}-${highlightIndex}`}
+                  className={`relative rounded-md sm:rounded-xl overflow-hidden ${highlightIndex >= 3 ? "hidden sm:block" : ""}`}
+                >
+                  <div className="aspect-w-4 aspect-h-3 sm:aspect-w-6 sm:aspect-h-5">
+                    <Image
+                      fill
+                      className="object-cover rounded-md sm:rounded-xl"
+                      src={highlight.image.asset.url || ""}
+                      alt={highlight.title || `Highlight ${highlightIndex + 1}`}
+                      sizes="400px"
+                    />
+                  </div>
+                </div>
+              ))
+            )}
         </div>
       </header>
       {/* MAIN */}
@@ -760,12 +751,10 @@ console.log(packageData?.id);
         <div className="w-full lg:w-3/5 xl:w-2/3 space-y-8 lg:pr-10 lg:space-y-10">
           {renderSection2()}
           {renderSection4()}
-          <MapWrapper packageId={packageData?.id}/>
+          <MapWrapper packageId={packageData?.id} />
           {renderSection8()}
           {renderSection6()}
-
         </div>
-        {/* SIDEBAR */}
         <div className=" lg:block flex-grow mt-14 lg:mt-0 min-h-screen">
           <div className="sticky top-28">{renderSidebar()}</div>
         </div>
