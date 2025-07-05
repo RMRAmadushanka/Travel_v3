@@ -6,7 +6,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { client } from '@/utils/client';
 import 'leaflet-polylinedecorator';
-import 'leaflet-routing-machine'; // Import the routing machine
+import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.js'
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css'
 
@@ -44,16 +44,15 @@ export default function RouteMap({ packageId }: RouteMapProps) {
         }`,
         { packageId }
       );
-
       const fetchedPoints: Point[] = data?.locations?.map((loc: any, index: number) => ({
         id: loc.locationId || `loc-${index}`,
         coords: [loc.map.lat, loc.map.lng],
         label: (index + 1).toString(),
         name: loc.locationName,
       })) || [];
-
-      // Sort the points based on locationId
-      const sortedPoints = fetchedPoints.sort((a, b) => a.id.localeCompare(b.id));
+      const sortedPoints = fetchedPoints.sort((a, b) => {
+        return parseInt(a.label) - parseInt(b.label);
+      });
 
       setPoints(sortedPoints);
     };
@@ -63,12 +62,11 @@ export default function RouteMap({ packageId }: RouteMapProps) {
 
   return (
     <div className="w-full">
-      {/* Map display only with custom height */}
       <MapContainer
         center={center}
         zoom={7}
         scrollWheelZoom={false}
-        className="w-full h-96"  // Change the height here (e.g., h-96 for 24rem height)
+        className="w-full h-96"
       >
         <TileLayer
           attribution="&copy; OpenStreetMap contributors"
@@ -80,40 +78,49 @@ export default function RouteMap({ packageId }: RouteMapProps) {
             <Popup>{name}</Popup>
           </Marker>
         ))}
-
-        {/* Routing logic */}
         <MapRoutingControl points={points} />
       </MapContainer>
     </div>
   );
 }
 
-// A new component that manages routing logic
 function MapRoutingControl({ points }: { points: Point[] }) {
-  const map = useMap(); // This provides the Leaflet map instance
+  const map = useMap();
 
   useEffect(() => {
     if (points.length > 1 && map) {
-      // Create a loop by adding the first point again at the end of the points array
-      const loopedPoints = [...points, points[0]]; // Adding points[0] at the end to make a loop
-
+      const defaultLocation = { coords: [6.9271, 79.8612], label: 'Last', name: 'New Location' };
+      const lastPoint = points[points.length - 1];
       const routingControl = L.Routing.control({
-        waypoints: loopedPoints.map(p => L.latLng(p.coords[0], p.coords[1])),
-        routeWhileDragging: true, // Enable dragging for routing
+        waypoints: [
+          ...points.map(p => L.latLng(p.coords[0], p.coords[1])),
+          L.latLng(defaultLocation.coords[0], defaultLocation.coords[1]),
+        ],
+        routeWhileDragging: true,
         lineOptions: {
           styles: [{ color: 'green', weight: 4 }],
         },
-        // Disable the directions box and itinerary
         show: false,
-        createMarker: function() { return null; }, // Prevent adding markers on route
+        createMarker: function() { return null; },
+      }).addTo(map);
+      const lastToDefaultRoutingControl = L.Routing.control({
+        waypoints: [
+          L.latLng(lastPoint.coords[0], lastPoint.coords[1]),
+          L.latLng(defaultLocation.coords[0], defaultLocation.coords[1]),
+        ],
+        routeWhileDragging: true,
+        lineOptions: {
+          styles: [{ color: 'green', weight: 4 }],
+        },
+        show: false,
+        createMarker: function() { return null; },
       }).addTo(map);
 
       return () => {
-        // Clean up the routing control when the component is unmounted or points change
         map.removeControl(routingControl);
+        map.removeControl(lastToDefaultRoutingControl);
       };
     }
-  }, [points, map]); // The effect will re-run when points or map change
-
-  return null; // This component does not render anything
+  }, [points, map]);
+  return null;
 }
