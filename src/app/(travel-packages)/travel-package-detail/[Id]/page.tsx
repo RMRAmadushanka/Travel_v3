@@ -214,16 +214,21 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 
 
   const renderSection4 = () => {
+    // Sort locations based on day value
+    const sortedLocations = packageData?.locations?.sort((a, b) => a.day - b.day);
+
+    console.log(sortedLocations);
+    
     return (
-      <div >
-        {packageData?.locations?.map((location, index) => (
+      <div>
+        {sortedLocations?.map((location, index) => (
           <DayAccordion
             key={location.locationId || index}
             day={location.day}
             title={location.title}
             description={location.description}
             activities={location.activities || []}
-            highlights={
+            highlights={ 
               (location.highlights || []).map((highlight) => ({
                 title: highlight.title,
                 imageUrl: highlight.image?.asset?.url || '',
@@ -236,12 +241,10 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
             imageUrl={location.mainImage?.asset?.url || ''}
           />
         ))}
-
-
-        {/* Add another DayAccordion for Day 2, Day 3, etc */}
       </div>
     );
-  };
+};
+
 
   const feedbackValidationSchema = Yup.object({
     email: Yup.string().email("Invalid email").required("Email is required"),
