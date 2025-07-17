@@ -1,6 +1,5 @@
 "use client"
 import React from "react";
-import SectionSubscribe2 from "@/components/SectionSubscribe2";
 import BgGlassmorphism from "@/components/BgGlassmorphism";
 import { TaxonomyType } from "@/data/types";
 import SectionHero3 from "@/app/(server-components)/SectionHero3";
@@ -68,7 +67,6 @@ function PageHome() {
       <div className="container px-1 sm:px-4 mb-24 ">
         <SectionHero3 className="" />
       </div>
-
       <div className="container relative space-y-24 mb-24 ">
         {/* SECTION 1 */}
         <div className="grid grid-cols-12 gap-6">
