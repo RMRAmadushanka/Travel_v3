@@ -26,6 +26,9 @@ import MobileFooterSticky from "@/components/MobileFooterSticky";
 import Textarea from "@/shared/Textarea";
 import { toast, ToastContainer } from "react-toastify";
 import Button from "@/shared/Button";
+import DayAccordion from "../../DayAccordion";
+import RouteMap from "@/components/RouteMap";
+import MapWrapper from "@/components/MapWrapper";
 export interface ListingStayDetailPageProps { }
 
 const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
@@ -66,27 +69,45 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
             description,
             duration,
             price,
-            locations[]{
+            locations[] {
               locationId,
               locationName,
-              map { lat, lng }
+              map { lat, lng },
+              day,
+              title,
+              description,
+              mainImage { asset->{url} },
+              activities,
+              highlights[] {
+                title,
+                image { asset->{url} }
+              },
+              accommodation,
+              mealPlan,
+              travelTime,
+              transportMode
             },
-            feedback[]{
+            feedback[] {
               rating,
               userName,
-              comment
+              comment,
+              packageId,
+              userId,
+              email
             },
             registerDate,
             saleOff,
             guestCount,
-            vehicles[]{
+            vehicles[] {
               vehicleId,
               vehicleName,
               vehicleType
             },
-            images[]{ asset->{url} }
+            images[] {
+              asset->{url}
+            }
           }`,
-          { id: Id } // Replace with actual package ID
+          { id: Id }
         );
         setPackageData(data);
       } catch (error) {
@@ -130,6 +151,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
       });
   };
 
+  console.log(packageData?.id);
 
 
   const ShimmerLoader = () => {
@@ -175,8 +197,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
   const renderSection2 = () => {
     return (
       <div className="listingSection__wrap">
-        <h2 className="text-2xl font-semibold">Package Description</h2>
-        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+        <h4 className="text-lg font-semibold">Package Description</h4>
+        <div className="w-full border-b border-neutral-200 dark:border-neutral-700"></div>
         <div className="text-neutral-6000 dark:text-neutral-300">
           {/* Description */}
           <span>
@@ -192,35 +214,37 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 
 
   const renderSection4 = () => {
-    return (
-      <div className="listingSection__wrap">
-        {/* HEADING */}
-        <div>
-          <h2 className="text-2xl font-semibold">Package Locations with dates</h2>
-          <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
-            Prices may increase on weekends or holidays
-          </span>
-        </div>
-        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
-        {/* CONTENT */}
-        <div className="flow-root">
-          <div className="text-sm sm:text-base text-neutral-6000 dark:text-neutral-300 -mb-4">
-            {packageData?.locations.map((location, index) => (
-              <div
-                key={index}
-                className={`p-4 flex justify-between items-center space-x-4 rounded-lg ${index % 2 === 0 ? "bg-neutral-100 dark:bg-neutral-800" : ""
-                  }`}
-              >
-                <span>{`Day ${index + 1}`}</span>
-                <span>{location.locationName}</span>
-              </div>
-            ))}
+    // Sort locations based on day value
+    const sortedLocations = packageData?.locations?.sort((a, b) => a.day - b.day);
 
-          </div>
-        </div>
+    console.log(sortedLocations);
+    
+    return (
+      <div>
+        {sortedLocations?.map((location, index) => (
+          <DayAccordion
+            key={location.locationId || index}
+            day={location.day}
+            title={location.title}
+            description={location.description}
+            activities={location.activities || []}
+            highlights={ 
+              (location.highlights || []).map((highlight) => ({
+                title: highlight.title,
+                imageUrl: highlight.image?.asset?.url || '',
+              }))
+            }
+            accommodation={location.accommodation}
+            mealPlan={location.mealPlan}
+            travelTime={location.travelTime}
+            transportMode={location.transportMode}
+            imageUrl={location.mainImage?.asset?.url || ''}
+          />
+        ))}
       </div>
     );
-  };
+};
+
 
   const feedbackValidationSchema = Yup.object({
     email: Yup.string().email("Invalid email").required("Email is required"),
@@ -361,7 +385,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
       <div className="listingSection__wrap">
         {/* HEADING */}
         <h2 className="text-2xl font-semibold">Things to know</h2>
-        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
+        <div className="w-full border-b border-neutral-200 dark:border-neutral-700" />
 
         {/* CONTENT */}
         <div>
@@ -466,7 +490,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
         const [emailResult, apiResult] = await Promise.all([sendEmailPromise, apiCallPromise]);
 
         if (apiResult.success) {
- 
+
           toast.success(`Your reservation for the ${packageData?.packageName} package has been successfully completed.`);
 
           // Reset the form after a successful reservation
@@ -685,64 +709,56 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
       {/*  HEADER */}
       <header className="rounded-md sm:rounded-xl">
         <div className="relative grid grid-cols-3 sm:grid-cols-4 gap-1 sm:gap-2">
-          <div
-            className="col-span-2 row-span-3 sm:row-span-2 relative rounded-md sm:rounded-xl overflow-hidden cursor-pointer"
-            onClick={handleOpenModalImageGallery}
-          >
-            <Image
-              fill
-              className="object-cover rounded-md sm:rounded-xl"
-              src={PHOTOS[0]}
-              alt=""
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
-            />
-            <div className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0 hover:opacity-50 transition-opacity"></div>
-          </div>
-          {PHOTOS.filter((_, i) => i >= 1 && i < 5).map((item, index) => (
+          {/* Main Image from the first location */}
+          {packageData && packageData.locations[0].mainImage && (
             <div
-              key={index}
-              className={`relative rounded-md sm:rounded-xl overflow-hidden ${index >= 3 ? "hidden sm:block" : ""
-                }`}
+              className="col-span-2 row-span-3 sm:row-span-2 relative rounded-md sm:rounded-xl overflow-hidden"
+              onClick={handleOpenModalImageGallery}
             >
-              <div className="aspect-w-4 aspect-h-3 sm:aspect-w-6 sm:aspect-h-5">
-                <Image
-                  fill
-                  className="object-cover rounded-md sm:rounded-xl "
-                  src={item || ""}
-                  alt=""
-                  sizes="400px"
-                />
-              </div>
-
-              {/* OVERLAY */}
-              <div
-                className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0 hover:opacity-50 transition-opacity cursor-pointer"
-                onClick={handleOpenModalImageGallery}
+              <Image
+                fill
+                className="object-cover rounded-md sm:rounded-xl"
+                src={packageData.locations[0].mainImage.asset.url}
+                alt="Main Image"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
               />
+              <div className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0"></div>
             </div>
-          ))}
+          )}
 
-          <button
-            className="absolute hidden md:flex md:items-center md:justify-center left-3 bottom-3 px-4 py-2 rounded-xl bg-neutral-100 text-neutral-500 hover:bg-neutral-200 z-10"
-            onClick={handleOpenModalImageGallery}
-          >
-            <Squares2X2Icon className="w-5 h-5" />
-            <span className="ml-2 text-neutral-800 text-sm font-medium">
-              Show all photos
-            </span>
-          </button>
+          {/* Highlight Images from the first two locations */}
+          {packageData &&
+            packageData.locations.slice(0, 2).map((location, locationIndex) =>
+              location.highlights.slice(0, 2).map((highlight, highlightIndex) => (
+                <div
+                  key={`${locationIndex}-${highlightIndex}`}
+                  className={`relative rounded-md sm:rounded-xl overflow-hidden ${highlightIndex >= 3 ? "hidden sm:block" : ""}`}
+                >
+                  <div className="aspect-w-4 aspect-h-3 sm:aspect-w-6 sm:aspect-h-5">
+                    <Image
+                      fill
+                      className="object-cover rounded-md sm:rounded-xl"
+                      src={highlight.image.asset.url || ""}
+                      alt={highlight.title || `Highlight ${highlightIndex + 1}`}
+                      sizes="400px"
+                    />
+                  </div>
+                </div>
+              ))
+            )}
         </div>
       </header>
       {/* MAIN */}
       <main className=" relative z-10 mt-11 flex flex-col lg:flex-row  ">
         {/* CONTENT */}
         <div className="w-full lg:w-3/5 xl:w-2/3 space-y-8 lg:pr-10 lg:space-y-10">
+               <h2 className="text-3xl font-semibold">{packageData?.packageName}</h2>
           {renderSection2()}
           {renderSection4()}
+          <MapWrapper packageId={packageData?.id} />
           {renderSection8()}
           {renderSection6()}
         </div>
-        {/* SIDEBAR */}
         <div className=" lg:block flex-grow mt-14 lg:mt-0 min-h-screen">
           <div className="sticky top-28">{renderSidebar()}</div>
         </div>

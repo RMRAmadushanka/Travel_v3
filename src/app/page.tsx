@@ -6,7 +6,10 @@ import SectionHero3 from "@/app/(server-components)/SectionHero3";
 import CardCategory6 from "@/components/CardCategory6";
 import SectionGridFeaturePlaces from "@/components/SectionGridFeaturePlaces";
 import SectionVideos from "@/components/SectionVideos";
-import { FloatingWhatsApp } from 'react-floating-whatsapp'
+import SectionHowItWork from "@/components/SectionHowItWork";
+import RouteMap from "@/components/RouteMap";
+import MapWrapper from "@/components/MapWrapper";
+
 
 const DEMO_CATS_2: TaxonomyType[] = [
   {
@@ -66,6 +69,7 @@ function PageHome() {
       {/* SECTION HERO */}
       <div className="container px-1 sm:px-4 mb-24 ">
         <SectionHero3 className="" />
+        <SectionHowItWork/>
       </div>
       <div className="container relative space-y-24 mb-24 ">
         {/* SECTION 1 */}
@@ -83,7 +87,7 @@ function PageHome() {
         </div>
         <SectionGridFeaturePlaces />
         <SectionVideos />
-     <FloatingWhatsApp phoneNumber="+94766694545" accountName="Ceylon Travels Guid "/>
+
       </div>
     </main>
   );

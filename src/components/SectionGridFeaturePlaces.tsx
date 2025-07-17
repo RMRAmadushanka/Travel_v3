@@ -64,29 +64,28 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
   const [data, setData] = useState<TravelPackageCardType[]>([]);
 
 
-  useEffect(() => {
-    const fetchSanityData = async () => {
-      const sanityData = await client.fetch(query);
+useEffect(() => {
+  const fetchSanityData = async () => {
+    const sanityData = await client.fetch(query);
 
-      const mappedData = sanityData.map((item) => ({
-        id: item.id,
-        packageName: item.packageName,
-        images: item.images,
-        duration: item.duration,
-        price: item.price,
-        locations: item.locations,
-        saleOff: item.saleOff,
-      }));
+    const mappedData = sanityData.map((item) => ({
+      id: item.id,
+      packageName: item.packageName,
+      images: item.images,
+      duration: item.duration,
+      price: item.price,
+      locations: item.locations,
+      saleOff: item.saleOff,
+    }));
 
-      setData(mappedData?.slice(0, 4))
- 
-    };
+    // Sort the mapped data by the number of locations (ascending)
+    const sortedData = mappedData.sort((a, b) => a.locations.length - b.locations.length);
 
-    fetchSanityData();
-  }, []);
+    setData(sortedData?.slice(0, 4)); // Update to show top 4 sorted by locations count
+  };
 
-
-  
+  fetchSanityData();
+}, []);
 
   const renderCard = (stay: StayDataType) => {
     let CardName = StayCard;

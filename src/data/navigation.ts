@@ -200,7 +200,7 @@ export const NAVIGATION_DEMO: NavItemType[] = [
   {
     id: ncNanoId(),
     href: "/car-packages",
-    name: "Cars",
+    name: "Rent a car",
     type: "megaMenu2",
     megaMenu: megaMenuDemo2,
   },

@@ -43,34 +43,36 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
 
 
   useEffect(() => {
-    const fetchSanityData = async () => {
-      const sanityData = await client.fetch(query);
+  const fetchSanityData = async () => {
+    const sanityData = await client.fetch(query);
 
-      const mappedData = sanityData.map((item:any) => ({
-        id: item.id,
-        packageName: item.packageName,
-        images: item.images,
-        duration: item.duration,
-        price: item.price,
-        locations: item.locations,
-        saleOff: item.saleOff,
-      }));
-  
-      
-      // Derive minimum and maximum prices dynamically
-      const prices = mappedData.map((item:any) => item.price);
-      const minPrice = Math.min(...prices);
-      const maxPrice = Math.max(...prices);
-      setMinMax([minPrice, maxPrice])
-      setPriceRange([minPrice, maxPrice]); // Dynamically set initial price range
-      setData(mappedData);
-      setFilteredData(mappedData); // Initially show all data
-    };
+    const mappedData = sanityData.map((item: any) => ({
+      id: item.id,
+      packageName: item.packageName,
+      images: item.images,
+      duration: item.duration,
+      price: item.price,
+      locations: item.locations,
+      saleOff: item.saleOff,
+    }));
 
-    fetchSanityData();
-  }, []);
+    // Sort by the number of locations in ascending order (fewer locations first)
+    const sortedData = mappedData.sort((a, b) => a.locations.length - b.locations.length); // ascending order
 
-  // Update filtered data whenever the price range changes
+    // Derive minimum and maximum prices dynamically
+    const prices = sortedData.map((item: any) => item.price);
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    setMinMax([minPrice, maxPrice]);
+    setPriceRange([minPrice, maxPrice]); // Dynamically set initial price range
+    setData(sortedData);
+    setFilteredData(sortedData); // Initially show all data
+  };
+
+  fetchSanityData();
+}, []);
+
+
   useEffect(() => {
     if (priceRange) {
       const filtered = data.filter(

@@ -16,11 +16,6 @@ const config: Config = {
         "2xl": "128px",
       },
     },
-    fontFamily: {
-      display: ["var(--font-display)", ...defaultTheme.fontFamily.sans],
-      body: ["var(--font-body)", ...defaultTheme.fontFamily.sans],
-    },
-
     extend: {
       colors: {
         primary: {
