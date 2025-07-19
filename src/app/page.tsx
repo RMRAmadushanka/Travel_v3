@@ -8,8 +8,9 @@ import CardCategory6 from "@/components/CardCategory6";
 import SectionGridFeaturePlaces from "@/components/SectionGridFeaturePlaces";
 import SectionVideos from "@/components/SectionVideos";
 import SectionHowItWork from "@/components/SectionHowItWork";
-import RouteMap from "@/components/RouteMap";
-import MapWrapper from "@/components/MapWrapper";
+
+import HowItWorks from "@/components/HowItWorks";
+
 
 
 const DEMO_CATS_2: TaxonomyType[] = [
@@ -70,7 +71,7 @@ function PageHome() {
       {/* SECTION HERO */}
       <div className="container px-1 sm:px-4 mb-24 ">
         <SectionHero3 className="" />
-        <SectionHowItWork/>
+      <HowItWorks/>
       </div>
 
       <div className="container relative space-y-24 mb-24 ">
