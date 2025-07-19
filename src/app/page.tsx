@@ -73,6 +73,7 @@ function PageHome() {
       <HowItWorks/>
       </div>
       <div className="container relative space-y-24 mb-24 ">
+                <SectionGridFeaturePlaces />
         {/* SECTION 1 */}
         <div className="grid grid-cols-12 gap-6">
           <div className="col-span-12 sm:col-span-6 lg:col-span-4 flex">
@@ -86,7 +87,7 @@ function PageHome() {
             <CardCategory6 taxonomy={DEMO_CATS_2[4]} />
           </div>
         </div>
-        <SectionGridFeaturePlaces />
+
         <SectionVideos />
 
       </div>
