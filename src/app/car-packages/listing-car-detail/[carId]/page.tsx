@@ -169,9 +169,7 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
     return (
       <div className="listingSection__wrap !space-y-6">
         {/* 1 */}
-        <div className="flex justify-between items-center">
-          <Badge color="pink" name="BMW car" />
-        </div>
+
 
         {/* Vehicle Name */}
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">
@@ -215,7 +213,8 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
             Vehicle parameters & utilities{" "}
           </h2>
         </div>
-        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+        
+        <div className="w-full border-b border-neutral-100 dark:border-neutral-700" />
         {/* 6 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-6 gap-x-10 text-sm text-neutral-700 dark:text-neutral-300 ">
           {/* TIEN ICH 1 */}
@@ -237,7 +236,7 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
     return (
       <div className="listingSection__wrap">
         <h2 className="text-2xl font-semibold">Car descriptions</h2>
-        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+        <div className="w-full border-b border-neutral-100 dark:border-neutral-700" />
         <div className="text-neutral-6000 dark:text-neutral-300">
           <p>
             {carData?.description || "Unknown"}
@@ -378,28 +377,26 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
   };
 
   //Policies
-  const renderSection8 = () => {
-    return (
-      <div className="listingSection__wrap">
-        {/* HEADING */}
-        <h2 className="text-2xl font-semibold">Things to know</h2>
-        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
+const renderSection8 = () => {
+  return (
+    <div className="listingSection__wrap py-6 px-4 bg-white dark:bg-neutral-800 rounded-lg ">
+      {/* HEADING */}
+      <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Things to know</h2>
+      <div className="w-full border-b border-neutral-100 dark:border-neutral-700 mb-4" />
 
-        {/* CONTENT */}
-
+      {/* CONTENT */}
+      <ul className="space-y-3 pl-5 list-disc">
         {carData?.policies.map((policy, index) => (
-          <div key={index}>
-            <div >
-              <span className="text-lg">{policy}</span>
-            </div>
-          </div>
+          <li key={index} className="text-lg text-gray-700 dark:text-gray-300">
+            {policy}
+          </li>
         ))}
+      </ul>
+    </div>
+  );
+};
 
 
-
-      </div>
-    );
-  };
 
 
 
@@ -608,7 +605,7 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
           {/* Second Image */}
           <div
             className="col-span-1 row-span-2 relative rounded-md sm:rounded-xl overflow-hidden cursor-pointer"
-            onClick={handleOpenModalImageGallery}
+            
           >
             <Image
               fill
@@ -639,7 +636,7 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({ }) => {
               {/* OVERLAY */}
               <div
                 className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0 hover:opacity-50 transition-opacity cursor-pointer"
-                onClick={handleOpenModalImageGallery}
+               
               />
             </div>
           ))}
