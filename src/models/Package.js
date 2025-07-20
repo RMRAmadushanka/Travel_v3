@@ -6,12 +6,14 @@ const PackageSchema = new mongoose.Schema({
   mobile: String,
   arrivalDate: Date,
   pickupPlace: String,
+  message: String,
   country: Object,
   groupSize: Number,
   days: [
     {
-      date: Date,
       location: String,
+      date: Date,
+      note: String,
     },
   ],
 });
