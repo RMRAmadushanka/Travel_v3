@@ -470,7 +470,7 @@ const ContactUs: FC = () => {
   <div className="block lg:hidden space-y-4">
     {/* Location Input */}
     <div className="flex items-center bg-white rounded-full px-4 py-3 border border-neutral-300 shadow-sm">
-      <i className="text-purple-500 las la-map-marker-alt text-lg flex-shrink-0"></i>
+      <i className="text-blue-500 las la-map-marker-alt text-lg flex-shrink-0"></i>
       <input
         className="ml-3 w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-500"
         type="text"
@@ -484,7 +484,7 @@ const ContactUs: FC = () => {
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {/* Date Picker */}
       <div className="flex items-center bg-white rounded-full px-4 py-3 border border-neutral-300 shadow-sm">
-        <i className="text-purple-500 las la-calendar-alt text-lg flex-shrink-0"></i>
+        <i className="text-blue-500 las la-calendar-alt text-lg flex-shrink-0"></i>
         <DatePicker
           selected={date}
           onChange={setDate}
@@ -497,7 +497,7 @@ const ContactUs: FC = () => {
 
       {/* Note Input */}
       <div className="flex items-center bg-white rounded-full px-4 py-3 border border-neutral-300 shadow-sm">
-        <i className="text-purple-500 las la-sticky-note text-lg flex-shrink-0"></i>
+        <i className="text-blue-500 las la-sticky-note text-lg flex-shrink-0"></i>
         <input
           className="ml-3 w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-500"
           type="text"
@@ -510,7 +510,7 @@ const ContactUs: FC = () => {
 
     {/* Add Button for Mobile */}
     <button
-      className="w-full bg-purple-600 text-white rounded-full px-6 py-3 font-semibold hover:bg-purple-700 active:bg-purple-800 transition-colors duration-200 shadow-sm"
+      className="w-full bg-blue-600 text-white rounded-full px-6 py-3 font-semibold hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200 shadow-sm"
       onClick={(e) => {
         e.preventDefault();
         handleAddTag(setFieldValue, values.days);
@@ -527,7 +527,7 @@ const ContactUs: FC = () => {
       <div className="flex flex-wrap xl:flex-nowrap items-center gap-4">
         {/* Location Input */}
         <div className="flex items-center bg-white rounded-full px-4 py-3 flex-1 min-w-0 border border-neutral-200 shadow-sm hover:shadow-md transition-shadow">
-          <i className="text-purple-500 las la-map-marker-alt text-lg flex-shrink-0"></i>
+          <i className="text-blue-500 las la-map-marker-alt text-lg flex-shrink-0"></i>
           <input
             className="ml-3 w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-500"
             type="text"
@@ -539,7 +539,7 @@ const ContactUs: FC = () => {
 
         {/* Date Picker */}
         <div className="flex items-center bg-white rounded-full px-4 py-3 w-full xl:w-48 border border-neutral-200 shadow-sm hover:shadow-md transition-shadow">
-          <i className="text-purple-500 las la-calendar-alt text-lg flex-shrink-0"></i>
+          <i className="text-blue-500 las la-calendar-alt text-lg flex-shrink-0"></i>
           <DatePicker
             selected={date}
             onChange={setDate}
@@ -552,7 +552,7 @@ const ContactUs: FC = () => {
 
         {/* Note Input */}
         <div className="flex items-center bg-white rounded-full px-4 py-3 flex-1 min-w-0 xl:max-w-xs border border-neutral-200 shadow-sm hover:shadow-md transition-shadow">
-          <i className="text-purple-500 las la-sticky-note text-lg flex-shrink-0"></i>
+          <i className="text-blue-500 las la-sticky-note text-lg flex-shrink-0"></i>
           <input
             className="ml-3 w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-500"
             type="text"
