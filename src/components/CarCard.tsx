@@ -31,7 +31,7 @@ const CarCard: FC<CarCardProps> = ({
 
   const renderSliderGallery = () => {
     return (
-      <div className="relative w-full rounded-2xl overflow-hidden">
+      <div className="relative w-full rounded-xl overflow-hidden">
         {/* Responsive aspect ratio container */}
         <div className="relative w-full h-48 sm:h-52 md:h-56 lg:h-60">
           <Image
@@ -86,7 +86,7 @@ const CarCard: FC<CarCardProps> = ({
 
   return (
     <div
-      className={`nc-CarCard group relative border border-neutral-200 dark:border-neutral-700 rounded-2xl sm:rounded-3xl overflow-hidden bg-white dark:bg-neutral-900 transition-shadow duration-300 hover:shadow-lg ${className}`}
+      className={`nc-CarCard group relative border border-neutral-200 dark:border-neutral-700 rounded-xl sm:rounded-xl overflow-hidden bg-white dark:bg-neutral-900 transition-shadow duration-300 hover:shadow-lg ${className}`}
       data-nc-id="CarCard"
     >
       <Link href={`/car-packages/listing-car-detail/${String(carId)}`} className="flex flex-col h-full">
