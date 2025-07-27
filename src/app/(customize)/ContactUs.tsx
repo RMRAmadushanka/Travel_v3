@@ -232,15 +232,15 @@ const ContactUs: FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white rounded-xl">
       {/* Hero Section */}
       <div
-        className="relative h-80 bg-cover bg-center bg-no-repeat"
+        className="relative h-80 bg-cover bg-center bg-no-repeat rounded-xl"
         style={{
           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://wallpapers.com/images/featured/best-travel-background-04ml2h9wywaoo6ei.jpg')`
         }}
       >
-        <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+        <div className="absolute inset-0 bg-black bg-opacity-30 rounded-xl"></div>
         <div className="relative z-10 flex flex-col justify-center h-full px-8 max-w-7xl mx-auto">
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
             Build Your Perfect Adventure

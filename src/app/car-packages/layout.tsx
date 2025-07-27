@@ -6,7 +6,7 @@ const DetailtLayout = ({ children }: { children: ReactNode }) => {
 
   return (
     <div className="ListingDetailPage">
-      <div>{children}</div>
+      <div className="container">{children}</div>
       <ToastContainer/>
     </div>
   );

@@ -2,10 +2,19 @@ import React from 'react';
 import bgcar from '@/images/car-without-bg.png'
 import Image from 'next/image';
 
-
 const CarRentalHero: React.FC = () => {
+  const scrollToCars = () => {
+    const carsSection = document.getElementById('featured-cars');
+    if (carsSection) {
+      carsSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 min-h-[600px] flex items-center w-full">
+    <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 min-h-[600px] flex items-center w-full rounded-xl">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-32 w-96 h-96 bg-blue-200 dark:bg-blue-800 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
@@ -33,7 +42,10 @@ const CarRentalHero: React.FC = () => {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
+              <button 
+                onClick={scrollToCars}
+                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+              >
                 Browse Cars
               </button>
             </div>

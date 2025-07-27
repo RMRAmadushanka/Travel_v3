@@ -45,9 +45,8 @@ function PageHome2() {
   }, []);
 
   return (
-
     <main className="nc-PageHome2 relative overflow-hidden">
-              <CarRentalHero/>
+      <CarRentalHero/>
       <div className="container relative space-y-24 mb-24 lg:space-y-28 lg:mb-28">
         <SectionHowItWork
           data={[
@@ -75,7 +74,7 @@ function PageHome2() {
           ]}
         />
 
-        <div>
+        <div id="featured-cars">
           <h2 className="text-3xl font-semibold">Featured Cars to Rent for Your Trip</h2>
         </div>
 
@@ -86,7 +85,6 @@ function PageHome2() {
         </div>
       </div>
     </main>
-
   );
 }
 

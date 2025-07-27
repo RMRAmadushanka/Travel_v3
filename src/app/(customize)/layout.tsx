@@ -10,7 +10,7 @@ import ContactUs from "./ContactUs";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className={`nc-ListingStayPage relative `}>
+    <div className="container rounded-xl">
       <ContactUs/>
       <ToastContainer/>
     </div>
