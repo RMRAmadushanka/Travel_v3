@@ -10,6 +10,7 @@ import HIW3imgDark from "@/images/HIW2-3-dark.png";
 import SectionHero2 from "@/app/(server-components)/SectionHero2";
 import { client } from "@/utils/client";
 import CarCard from "@/components/CarCard";
+import CarRentalHero from "./CarRentalHero";
 
 function PageHome2() {
   const [carData, setCarData] = useState([]);
@@ -46,9 +47,8 @@ function PageHome2() {
   return (
 
     <main className="nc-PageHome2 relative overflow-hidden">
+              <CarRentalHero/>
       <div className="container relative space-y-24 mb-24 lg:space-y-28 lg:mb-28">
-        <SectionHero2 className="" />
-
         <SectionHowItWork
           data={[
             {
