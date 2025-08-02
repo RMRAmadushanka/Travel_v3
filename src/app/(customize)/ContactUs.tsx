@@ -1,9 +1,8 @@
 "use client"
-import React, { FC, useEffect, useMemo, useState } from "react";
-import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
+import React, { FC, useMemo, useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Label from "@/components/Label";
-import ButtonPrimary from "@/shared/ButtonPrimary";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import Select2 from "react-select";
@@ -11,7 +10,7 @@ import countryList from "react-select-country-list";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import emailjs from '@emailjs/browser';
 const ContactUs: FC = () => {
   const countryOptions = useMemo(() => countryList().getData(), []);
   const [location, setLocation] = useState<string>("");
@@ -28,7 +27,7 @@ const ContactUs: FC = () => {
 
     const newTag = { location, date, note };
     const updatedDays = [...currentDays, newTag];
-    
+
     // Update Formik's `days` array with the new location and date
     setFieldValue("days", updatedDays);
 
@@ -42,97 +41,94 @@ const ContactUs: FC = () => {
   const handleDeleteTag = (index: number, setFieldValue: any, currentDays: any[]) => {
     const updatedTags = currentDays.filter((_, tagIndex) => tagIndex !== index);
     setTags(updatedTags);
-    
     // Update Formik's `days` array to reflect the deleted tag
     setFieldValue("days", updatedTags);
   };
 
   const renderNoInclude = ({
-  location,
-  date,
-  note,
-  index,
-  setFieldValue,
-  currentDays,
-}: {
-  location: string;
-  note: string;
-  date: Date | null;
-  index: number;
-  setFieldValue: any;
-  currentDays: any[];
-}) => {
-  const formattedDate = date ? date.toLocaleDateString() : "No date selected";
-  const displayLocation = location || "No location selected";
-  
-  return (
-    <div className="py-3">
-      {/* Mobile Layout (stacked vertically) */}
-      <div className="block md:hidden">
-        <div className="flex justify-between items-start mb-2">
-          <div className="flex-1 pr-4">
-            <div className="text-sm text-gray-500 mb-1">Location:</div>
-            <div className="text-neutral-600 dark:text-neutral-400 font-medium">
-              {displayLocation}
-            </div>
-          </div>
-          <i
-            className="text-2xl text-neutral-400 las la-times-circle hover:text-neutral-900 dark:hover:text-neutral-100 cursor-pointer flex-shrink-0"
-            onClick={() => handleDeleteTag(index, setFieldValue, currentDays)}
-          ></i>
-        </div>
-        
-        <div className="grid grid-cols-1 gap-2">
-          <div>
-            <div className="text-sm text-gray-500 mb-1">Date:</div>
-            <div className={`text-sm ${!date ? "text-red-500" : "text-neutral-600 dark:text-neutral-400"}`}>
-              {formattedDate}
-            </div>
-          </div>
-          
-          {note && (
-            <div>
-              <div className="text-sm text-gray-500 mb-1">Note:</div>
-              <div className="text-sm text-neutral-600 dark:text-neutral-400">
-                {note}
+    location,
+    date,
+    note,
+    index,
+    setFieldValue,
+    currentDays,
+  }: {
+    location: string;
+    note: string;
+    date: Date | null;
+    index: number;
+    setFieldValue: any;
+    currentDays: any[];
+  }) => {
+    const formattedDate = date ? date.toLocaleDateString() : "No date selected";
+    const displayLocation = location || "No location selected";
+
+      
+    return (
+      <div className="py-3">
+        {/* Mobile Layout (stacked vertically) */}
+        <div className="block md:hidden">
+          <div className="flex justify-between items-start mb-2">
+            <div className="flex-1 pr-4">
+              <div className="text-sm text-gray-500 mb-1">Location:</div>
+              <div className="text-neutral-600 dark:text-neutral-400 font-medium">
+                {displayLocation}
               </div>
             </div>
-          )}
-        </div>
-      </div>
+            <i
+              className="text-2xl text-neutral-400 las la-times-circle hover:text-neutral-900 dark:hover:text-neutral-100 cursor-pointer flex-shrink-0"
+              onClick={() => handleDeleteTag(index, setFieldValue, currentDays)}
+            ></i>
+          </div>
 
-      {/* Desktop Layout (horizontal) */}
-      <div className="hidden md:flex justify-between items-center">
-        <div className="flex-1 min-w-0 pr-4">
-          <span className="text-neutral-600 dark:text-neutral-400 font-medium truncate block">
-            {displayLocation}
-          </span>
+          <div className="grid grid-cols-1 gap-2">
+            <div>
+              <div className="text-sm text-gray-500 mb-1">Date:</div>
+              <div className={`text-sm ${!date ? "text-red-500" : "text-neutral-600 dark:text-neutral-400"}`}>
+                {formattedDate}
+              </div>
+            </div>
+
+            {note && (
+              <div>
+                <div className="text-sm text-gray-500 mb-1">Note:</div>
+                <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                  {note}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-        
-        <div className="flex-shrink-0 w-32 text-center px-2">
-          <span className={`text-sm ${!date ? "text-red-500" : "text-neutral-600 dark:text-neutral-400"}`}>
-            {formattedDate}
-          </span>
-        </div>
-        
-        {note && (
-          <div className="flex-1 min-w-0 px-2 text-center">
-            <span className="text-sm text-neutral-600 dark:text-neutral-400 truncate block">
-              {note}
+
+        {/* Desktop Layout (horizontal) */}
+        <div className="hidden md:flex justify-between items-center">
+          <div className="flex-1 min-w-0 pr-4">
+            <span className="text-neutral-600 dark:text-neutral-400 font-medium truncate block">
+              {displayLocation}
             </span>
           </div>
-        )}
-        
-        <div className="flex-shrink-0 ml-4">
-          <i
-            className="text-2xl text-red-400 las la-times-circle hover:text-neutral-900 dark:hover:text-neutral-100 cursor-pointer"
-            onClick={() => handleDeleteTag(index, setFieldValue, currentDays)}
-          ></i>
+          <div className="flex-shrink-0 w-32 text-center px-2">
+            <span className={`text-sm ${!date ? "text-red-500" : "text-neutral-600 dark:text-neutral-400"}`}>
+              {formattedDate}
+            </span>
+          </div>
+          {note && (
+            <div className="flex-1 min-w-0 px-2 text-center">
+              <span className="text-sm text-neutral-600 dark:text-neutral-400 truncate block">
+                {note}
+              </span>
+            </div>
+          )}
+          <div className="flex-shrink-0 ml-4">
+            <i
+              className="text-2xl text-red-400 las la-times-circle hover:text-neutral-900 dark:hover:text-neutral-100 cursor-pointer"
+              onClick={() => handleDeleteTag(index, setFieldValue, currentDays)}
+            ></i>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -178,7 +174,6 @@ const ContactUs: FC = () => {
       .min(1, "At least one day is required")
       .max(10, "You can only add up to 10 days"),
   });
-
   const initialValues = {
     name: "",
     email: "",
@@ -190,10 +185,8 @@ const ContactUs: FC = () => {
     message: "",
     days: [] as { date: Date | null; location: string; note: string }[],
   };
-
   // Common input styling for consistent appearance
   const inputClassName = "border border-neutral-300 p-3 rounded-md w-full bg-white dark:bg-neutral-900 dark:border-neutral-700 h-12";
-
   // Custom styles for react-select to match other inputs
   const selectStyles = {
     control: (provided: any, state: any) => ({
@@ -231,6 +224,82 @@ const ContactUs: FC = () => {
     })
   };
 
+  const sendEmail = async(formData) => {
+    try {
+    const {
+      name,
+      email,
+      mobile,
+      pickupPlace,
+      country,
+      groupSize,
+      arrivalDate,
+      message,
+      days,
+    } = formData;
+
+    // Format the days array as HTML
+    const formattedDays = days.map((day, index) => {
+      const dayIndex = index + 1;
+      return `
+        <p><strong>Day ${dayIndex}:</strong></p>
+        <ul style="list-style-type: none; padding-left: 0;">
+          <li><strong>Location:</strong> ${day.location || "No location provided"}</li>
+          <li><strong>Date:</strong> ${day.date ? new Date(day.date).toLocaleDateString("en-GB") : "No date provided"}</li>
+          <li><strong>Note:</strong> ${day.note || "No note provided"}</li>
+        </ul>
+      `;
+    }).join(""); // Join all days together into a single string
+
+    // Prepare the email parameters
+    const emailParams = {
+      name,
+      email,
+      mobile,
+      pickupPlace,
+      country: country.label,
+      groupSize,
+      arrivalDate: arrivalDate.toLocaleDateString(),
+      message,
+      formattedDays, // Send the formatted days HTML string
+      contactEmail: "rrathnayaka1998@gmail.com",
+      contactPhone: "123-456-7890", // Replace with your contact phone number
+    };
+
+    // Send the email using EmailJS
+    const response = await emailjs.send(process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID_CUSTOM_PKG, process.env.NEXT_PUBLIC_EMAILJS_PACKAGE_RESERVATION_TEMPLATE_ID_CUSTOM_PKG, emailParams, process.env.NEXT_PUBLIC_EMAILJS_USER_ID_CUSTOM_PKG)
+
+
+    return response;
+  } catch (error) {
+    console.error("Error sending email:", error);
+    throw new Error("Failed to send the email.");
+  }
+      }
+
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    if (values.days.length === 0) {
+      setTagsError("You must select at least one travel day.");
+      setSubmitting(false);
+      return;
+    }
+
+    setTagsError(""); // Clear error if days are selected
+
+    try {
+      const response = await sendEmail(values);
+      if (response.status === 200) {
+        alert("Your inquiry has been submitted successfully!");
+        resetForm(); // Reset form after successful submission
+      } else {
+        alert("There was an issue submitting your inquiry.");
+      }
+    } catch (error) {
+      alert("An error occurred. Please try again later.");
+    }
+
+    setSubmitting(false); // Stop the form submission spinner
+  };
   return (
     <div className="min-h-screen bg-white rounded-xl">
       {/* Hero Section */}
@@ -250,50 +319,12 @@ const ContactUs: FC = () => {
           </p>
         </div>
       </div>
-
       {/* Contact Form */}
       <div className="max-w-7xl mx-auto px-8 py-12">
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={(values, { setSubmitting, resetForm }) => {
-            if (values.days.length === 0) {
-              setTagsError("You must select at least one travel day.");
-              setSubmitting(false);
-              return;
-            }
-            
-            console.log(values);
-            
-            setTagsError("");
-            fetch("/api/packages", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(values),
-            })
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error("Failed to send message");
-                }
-                return response.json();
-              })
-              .then((data) => {
-                toast.success("Your customized package request has been successfully submitted. Our team will contact you shortly!");
-                resetForm();
-                setTags([]);
-                setLocation("");
-                setDate(null);
-                setTagsError("");
-              })
-              .catch((error) => {
-                toast.error("Something went wrong. Please try again later.");
-              })
-              .finally(() => {
-                setSubmitting(false);
-              });
-          }}
+          onSubmit={handleSubmit}
         >
           {({ values, setFieldValue, errors, touched, isSubmitting }) => (
             <Form className="space-y-8">
@@ -313,7 +344,6 @@ const ContactUs: FC = () => {
                     className="text-red-500 text-sm mt-1"
                   />
                 </div>
-
                 {/* Email Field */}
                 <div>
                   <Label>E-mail <span className="text-red-500">*</span></Label>
@@ -329,7 +359,6 @@ const ContactUs: FC = () => {
                     className="text-red-500 text-sm mt-1"
                   />
                 </div>
-
                 {/* Phone Field */}
                 <div>
                   <Label>Phone <span className="text-red-500">*</span></Label>
@@ -366,7 +395,6 @@ const ContactUs: FC = () => {
                   />
                 </div>
               </div>
-
               {/* Second Row - All fields with consistent sizing */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 {/* Pickup Place Field */}
@@ -383,7 +411,6 @@ const ContactUs: FC = () => {
                     className="text-red-500 text-sm mt-1"
                   />
                 </div>
-
                 {/* Country Field */}
                 <div>
                   <Label>Country <span className="text-red-500">*</span></Label>
@@ -401,7 +428,6 @@ const ContactUs: FC = () => {
                     className="text-red-500 text-sm mt-1"
                   />
                 </div>
-
                 {/* Group Size Field */}
                 <div>
                   <Label>Group Size <span className="text-red-500">*</span></Label>
@@ -419,7 +445,6 @@ const ContactUs: FC = () => {
                     className="text-red-500 text-sm mt-1"
                   />
                 </div>
-
                 {/* Arrival Date Field */}
                 <div>
                   <Label>Arrival Date <span className="text-red-500">*</span></Label>
@@ -441,7 +466,6 @@ const ContactUs: FC = () => {
                   />
                 </div>
               </div>
-
               {/* Message Field */}
               <div>
                 <Label>Message</Label>
@@ -458,143 +482,131 @@ const ContactUs: FC = () => {
                   className="text-red-500 text-sm mt-1"
                 />
               </div>
-
               {/* Days Selection */}
-<div className="space-y-6">
-  <div>
-    <Label>Travel Days <span className="text-red-500">*</span></Label>
-    <p className="text-sm text-gray-600 mb-4">Add the locations and dates for your travel itinerary</p>
-  </div>
-  
-  {/* Mobile Layout (stacked vertically) */}
-  <div className="block lg:hidden space-y-4">
-    {/* Location Input */}
-    <div className="flex items-center bg-white rounded-full px-4 py-3 border border-neutral-300 shadow-sm">
-      <i className="text-blue-500 las la-map-marker-alt text-lg flex-shrink-0"></i>
-      <input
-        className="ml-3 w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-500"
-        type="text"
-        placeholder="Enter Location"
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
-      />
-    </div>
-
-    {/* Date and Note Row for Mobile */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {/* Date Picker */}
-      <div className="flex items-center bg-white rounded-full px-4 py-3 border border-neutral-300 shadow-sm">
-        <i className="text-blue-500 las la-calendar-alt text-lg flex-shrink-0"></i>
-        <DatePicker
-          selected={date}
-          onChange={setDate}
-          className="ml-3 w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-500"
-          placeholderText="Select Date"
-          dateFormat="MMM dd, yyyy"
-          minDate={new Date()}
-        />
-      </div>
-
-      {/* Note Input */}
-      <div className="flex items-center bg-white rounded-full px-4 py-3 border border-neutral-300 shadow-sm">
-        <i className="text-blue-500 las la-sticky-note text-lg flex-shrink-0"></i>
-        <input
-          className="ml-3 w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-500"
-          type="text"
-          placeholder="Add Note (Optional)"
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-        />
-      </div>
-    </div>
-
-    {/* Add Button for Mobile */}
-    <button
-      className="w-full bg-blue-600 text-white rounded-full px-6 py-3 font-semibold hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200 shadow-sm"
-      onClick={(e) => {
-        e.preventDefault();
-        handleAddTag(setFieldValue, values.days);
-      }}
-    >
-      <i className="las la-plus mr-2"></i>
-      Add Day
-    </button>
-  </div>
-  
-  {/* Desktop Layout (horizontal) */}
-  <div className="hidden lg:block">
-    <div className="border border-neutral-300 rounded-2xl p-4 bg-gray-50/50">
-      <div className="flex flex-wrap xl:flex-nowrap items-center gap-4">
-        {/* Location Input */}
-        <div className="flex items-center bg-white rounded-full px-4 py-3 flex-1 min-w-0 border border-neutral-200 shadow-sm hover:shadow-md transition-shadow">
-          <i className="text-blue-500 las la-map-marker-alt text-lg flex-shrink-0"></i>
-          <input
-            className="ml-3 w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-500"
-            type="text"
-            placeholder="Enter Location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-          />
-        </div>
-
-        {/* Date Picker */}
-        <div className="flex items-center bg-white rounded-full px-4 py-3 w-full xl:w-48 border border-neutral-200 shadow-sm hover:shadow-md transition-shadow">
-          <i className="text-blue-500 las la-calendar-alt text-lg flex-shrink-0"></i>
-          <DatePicker
-            selected={date}
-            onChange={setDate}
-            className="ml-3 w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-500"
-            placeholderText="Select Date"
-            dateFormat="MMM dd, yyyy"
-            minDate={new Date()}
-          />
-        </div>
-
-        {/* Note Input */}
-        <div className="flex items-center bg-white rounded-full px-4 py-3 flex-1 min-w-0 xl:max-w-xs border border-neutral-200 shadow-sm hover:shadow-md transition-shadow">
-          <i className="text-blue-500 las la-sticky-note text-lg flex-shrink-0"></i>
-          <input
-            className="ml-3 w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-500"
-            type="text"
-            placeholder="Add Note (Optional)"
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-          />
-        </div>
-
-        {/* Add Button */}
-        <button
-          className="bg-blue-600 text-white rounded-full px-8 py-3 font-semibold hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200 shadow-sm hover:shadow-md flex-shrink-0 whitespace-nowrap"
-          onClick={(e) => {
-            e.preventDefault();
-            handleAddTag(setFieldValue, values.days);
-          }}
-        >
-          <i className="las la-plus mr-2"></i>
-          Add Day
-        </button>
-      </div>
-    </div>
-  </div>
-  
-  {/* Error Messages */}
-  <div className="space-y-2">
-    {tagsError && (
-      <div className="flex items-center text-red-500 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-        <i className="las la-exclamation-circle mr-2 flex-shrink-0"></i>
-        {tagsError}
-      </div>
-    )}
-
-    {errors.days && typeof errors.days === 'string' && (
-      <div className="flex items-center text-red-500 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-        <i className="las la-exclamation-triangle mr-2 flex-shrink-0"></i>
-        {errors.days}
-      </div>
-    )}
-  </div>
-</div>
-
+              <div className="space-y-6">
+                <div>
+                  <Label>Travel Days <span className="text-red-500">*</span></Label>
+                  <p className="text-sm text-gray-600 mb-4">Add the locations and dates for your travel itinerary</p>
+                </div>
+                {/* Mobile Layout (stacked vertically) */}
+                <div className="block lg:hidden space-y-4">
+                  {/* Location Input */}
+                  <div className="flex items-center bg-white rounded-full px-4 py-3 border border-neutral-300 shadow-sm">
+                    <i className="text-blue-500 las la-map-marker-alt text-lg flex-shrink-0"></i>
+                    <input
+                      className="ml-3 w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-500"
+                      type="text"
+                      placeholder="Enter Location"
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                    />
+                  </div>
+                  {/* Date and Note Row for Mobile */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Date Picker */}
+                    <div className="flex items-center bg-white rounded-full px-4 py-3 border border-neutral-300 shadow-sm">
+                      <i className="text-blue-500 las la-calendar-alt text-lg flex-shrink-0"></i>
+                      <DatePicker
+                        selected={date}
+                        onChange={setDate}
+                        className="ml-3 w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-500"
+                        placeholderText="Select Date"
+                        dateFormat="MMM dd, yyyy"
+                        minDate={new Date()}
+                      />
+                    </div>
+                    {/* Note Input */}
+                    <div className="flex items-center bg-white rounded-full px-4 py-3 border border-neutral-300 shadow-sm">
+                      <i className="text-blue-500 las la-sticky-note text-lg flex-shrink-0"></i>
+                      <input
+                        className="ml-3 w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-500"
+                        type="text"
+                        placeholder="Add Note (Optional)"
+                        value={note}
+                        onChange={(e) => setNote(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  {/* Add Button for Mobile */}
+                  <button
+                    className="w-full bg-blue-600 text-white rounded-full px-6 py-3 font-semibold hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200 shadow-sm"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleAddTag(setFieldValue, values.days);
+                    }}
+                  >
+                    <i className="las la-plus mr-2"></i>
+                    Add Day
+                  </button>
+                </div>
+                {/* Desktop Layout (horizontal) */}
+                <div className="hidden lg:block">
+                  <div className="border border-neutral-300 rounded-2xl p-4 bg-gray-50/50">
+                    <div className="flex flex-wrap xl:flex-nowrap items-center gap-4">
+                      {/* Location Input */}
+                      <div className="flex items-center bg-white rounded-full px-4 py-3 flex-1 min-w-0 border border-neutral-200 shadow-sm hover:shadow-md transition-shadow">
+                        <i className="text-blue-500 las la-map-marker-alt text-lg flex-shrink-0"></i>
+                        <input
+                          className="ml-3 w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-500"
+                          type="text"
+                          placeholder="Enter Location"
+                          value={location}
+                          onChange={(e) => setLocation(e.target.value)}
+                        />
+                      </div>
+                      {/* Date Picker */}
+                      <div className="flex items-center bg-white rounded-full px-4 py-3 w-full xl:w-48 border border-neutral-200 shadow-sm hover:shadow-md transition-shadow">
+                        <i className="text-blue-500 las la-calendar-alt text-lg flex-shrink-0"></i>
+                        <DatePicker
+                          selected={date}
+                          onChange={setDate}
+                          className="ml-3 w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-500"
+                          placeholderText="Select Date"
+                          dateFormat="MMM dd, yyyy"
+                          minDate={new Date()}
+                        />
+                      </div>
+                      {/* Note Input */}
+                      <div className="flex items-center bg-white rounded-full px-4 py-3 flex-1 min-w-0 xl:max-w-xs border border-neutral-200 shadow-sm hover:shadow-md transition-shadow">
+                        <i className="text-blue-500 las la-sticky-note text-lg flex-shrink-0"></i>
+                        <input
+                          className="ml-3 w-full border-none outline-none bg-transparent focus:outline-none focus:ring-0 text-gray-900 placeholder-gray-500"
+                          type="text"
+                          placeholder="Add Note (Optional)"
+                          value={note}
+                          onChange={(e) => setNote(e.target.value)}
+                        />
+                      </div>
+                      {/* Add Button */}
+                      <button
+                        className="bg-blue-600 text-white rounded-full px-8 py-3 font-semibold hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200 shadow-sm hover:shadow-md flex-shrink-0 whitespace-nowrap"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleAddTag(setFieldValue, values.days);
+                        }}
+                      >
+                        <i className="las la-plus mr-2"></i>
+                        Add Day
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                {/* Error Messages */}
+                <div className="space-y-2">
+                  {tagsError && (
+                    <div className="flex items-center text-red-500 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                      <i className="las la-exclamation-circle mr-2 flex-shrink-0"></i>
+                      {tagsError}
+                    </div>
+                  )}
+                  {errors.days && typeof errors.days === 'string' && (
+                    <div className="flex items-center text-red-500 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                      <i className="las la-exclamation-triangle mr-2 flex-shrink-0"></i>
+                      {errors.days}
+                    </div>
+                  )}
+                </div>
+              </div>
               {/* Render Added Days */}
               {values.days.length > 0 && (
                 <div className="flow-root">
@@ -606,32 +618,28 @@ const ContactUs: FC = () => {
                     </div>
                     {values.days.map((day, index) => (
                       <div key={index}>
-                        {renderNoInclude({ 
-                          location: day.location, 
+                        {renderNoInclude({
+                          location: day.location,
                           date: day.date,
                           note: day.note,
-                          index, 
+                          index,
                           setFieldValue,
-                          currentDays: values.days 
+                          currentDays: values.days
                         })}
                       </div>
                     ))}
                   </div>
                 </div>
               )}
-              
               {/* Submit Button */}
               <div>
-
-                
-                        <button
-          className="bg-blue-600 text-white rounded-full px-8 py-3 font-semibold hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200 shadow-sm hover:shadow-md flex-shrink-0 whitespace-nowrap"
-          type="submit"
-          disabled={isSubmitting}
-        >
-         
-          {isSubmitting ? "Sending..." : "Send Inquiry"}
-        </button>
+                <button
+                  className="bg-blue-600 text-white rounded-full px-8 py-3 font-semibold hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200 shadow-sm hover:shadow-md flex-shrink-0 whitespace-nowrap"
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Sending..." : "Send Inquiry"}
+                </button>
               </div>
             </Form>
           )}
