@@ -261,12 +261,11 @@ const ContactUs: FC = () => {
       groupSize,
       arrivalDate: arrivalDate.toLocaleDateString(),
       message,
-      formattedDays, // Send the formatted days HTML string
+      formattedDays,
       contactEmail: "rrathnayaka1998@gmail.com",
-      contactPhone: "123-456-7890", // Replace with your contact phone number
+      contactPhone: "123-456-7890",
     };
 
-    // Send the email using EmailJS
     const response = await emailjs.send(process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID_CUSTOM_PKG, process.env.NEXT_PUBLIC_EMAILJS_PACKAGE_RESERVATION_TEMPLATE_ID_CUSTOM_PKG, emailParams, process.env.NEXT_PUBLIC_EMAILJS_USER_ID_CUSTOM_PKG)
 
 
